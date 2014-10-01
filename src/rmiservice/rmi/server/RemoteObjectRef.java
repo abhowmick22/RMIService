@@ -1,4 +1,4 @@
-package assignment2.rmi.server;
+package rmiservice.rmi.server;
 
 public class RemoteObjectRef
 {

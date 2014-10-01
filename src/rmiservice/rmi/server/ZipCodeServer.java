@@ -1,5 +1,4 @@
-package assignment2.rmi.server;
-
+package rmiservice.rmi.server;
 
 public interface ZipCodeServer // extends YourRemote or whatever
 {
