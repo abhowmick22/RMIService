@@ -1,4 +1,4 @@
-package assignment2.rmi.client;
+package rmiservice.rmi.client;
 
 import java.net.*;
 import java.io.*;
