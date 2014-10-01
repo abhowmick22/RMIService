@@ -1,6 +1,8 @@
 package rmiservice.rmi.client;
 
-public class ZipCodeList
+import java.io.Serializable;
+
+public class ZipCodeList implements Serializable
 {
     String city;
     String ZipCode;

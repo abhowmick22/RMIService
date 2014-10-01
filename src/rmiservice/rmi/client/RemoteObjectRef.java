@@ -1,5 +1,8 @@
 package rmiservice.rmi.client;
 
+import java.lang.reflect.InvocationTargetException;
+import java.net.UnknownHostException;
+
 public class RemoteObjectRef
 {
     String IP_adr;
@@ -31,7 +34,7 @@ public class RemoteObjectRef
         
         Object o;
         try {
-            o = c.newInstance();
+            o = c.getConstructor(String.class, Integer.class).newInstance(this.IP_adr, this.Port);
         }
         catch (InstantiationException e) {
             System.out.println("Could not instantiate class: "+ className);
@@ -39,6 +42,23 @@ public class RemoteObjectRef
         }
         catch (IllegalAccessException e) {
             System.out.println("Illegal access for class: "+ className);
+            return null;
+        }
+        catch (IllegalArgumentException e) {
+            System.out.println("Illegal arguments for class: "+ className);
+            return null;
+        }
+        catch (SecurityException e) {
+            System.out.println("Security exception while instantiating: "+ className);
+            return null;
+        }
+        catch (InvocationTargetException e) {
+            System.out.println("Target invocation exception while instantiating: "+ className);
+            return null;
+        }
+        catch (NoSuchMethodException e) {
+            //won't happen
+            System.out.println("Constructor exception while instantiating: "+ className);
             return null;
         }
         return o;
