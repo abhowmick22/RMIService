@@ -18,8 +18,10 @@ public class RemoteObjectRef
         Remote_Interface_Name=riname;
     }
 
-    // this method is important, since it is a stub creator.
-    // 
+    /**
+     * Creates the stub for the remote object that contains the logic for the task.
+     * @return The stub of the remote object.
+     */
     Object localise()
     {
         String className = this.Remote_Interface_Name + "_stub";
