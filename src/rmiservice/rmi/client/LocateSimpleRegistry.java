@@ -6,46 +6,32 @@ import java.io.*;
 //Needs to act as stub for LocateSimpleRegistry on the server
 public class LocateSimpleRegistry 
 { 
-    /*
-    // this is the SOLE static method.
-    // you use it as: LocateSimpleRegistry.getRegistry(123.123.123.123, 2048)
-    // and it returns null if there is none, else it returns the registry.
-    // actually the registry is just a pair of host IP and port. 
-    // inefficient? well you can change it as you like. 
-    // for the rest, you can see SimpleRegistry.java.
-    public static SimpleRegistry getRegistry(String host, int port)
+    
+    public static SimpleRegistry getRegistry(String regHost, int regPort)
     {
-    // open socket.
-    try{
-        Socket soc = new Socket(host, port);
-        
-        // get TCP streams and wrap them. 
-        BufferedReader in = 
-        new BufferedReader(new InputStreamReader (soc.getInputStream()));
-        PrintWriter out = 
-        new PrintWriter(soc.getOutputStream(), true);
-        
-        // ask.
-        out.println("who are you?");
-        
-        // gets answer.
-        if ((in.readLine()).equals("I am a simple registry."))
-        {
-            return new SimpleRegistry(host, port);
-        }
-        else
-        {
-            System.out.println("somebody is there but not a  registry!");
+        try{
+            Socket clientSocket = new Socket(regHost, regPort);
+            ObjectOutputStream outStream = new ObjectOutputStream(clientSocket.getOutputStream());
+            ObjectInputStream inStream = new ObjectInputStream(clientSocket.getInputStream());
+            ClientRegMsg crm = new ClientRegMsg();
+            crm.message = "Who are you?";
+            outStream.writeObject(crm);
+            outStream.flush();  //can't close outStream yet because it screws up the connection
+            String retValue = (String) inStream.readObject();    
+            inStream.close();
+            outStream.close();
+            clientSocket.close();
+            if (retValue.equals("I am a simple registry.")) {
+                return new SimpleRegistry(regHost, regPort);
+            }
+            else {
+                System.out.println("Somebody is there but not a registry!");
+                return null;
+            }
+        } catch (Exception e) { 
+            System.out.println("Nobody is there!"+e);
             return null;
         }
     }
-    catch (Exception e) 
-        { 
-        System.out.println("nobody is there!"+e);
-        return null;
-        }
-    }
-    */
-    
 }
 

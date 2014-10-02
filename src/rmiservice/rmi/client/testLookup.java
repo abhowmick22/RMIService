@@ -21,14 +21,14 @@ public class testLookup
  System.out.println("We lookup "+ServiceName);
 
  // locate.
- SimpleRegistry sr = LocateSimpleRegistry.getRegistry(host, port);
+ SimpleRegistry crHelper = new SimpleRegistry(host, port);
 
- System.out.println("located."+sr+"/n");
+ System.out.println("located."+crHelper+"/n");
  
- if (sr != null)
+ if (crHelper != null)
      {
      // lookup.
-     RemoteObjectRef ror = sr.lookup(ServiceName);
+     RemoteObjectRef ror = crHelper.lookup(ServiceName);
      
      if (ror != null)
          {

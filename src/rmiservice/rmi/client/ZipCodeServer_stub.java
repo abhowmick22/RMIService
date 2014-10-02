@@ -3,7 +3,6 @@ package rmiservice.rmi.client;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ public class ZipCodeServer_stub implements ZipCodeServer
         if(retValue == null) {
             //exception on client side, already dealt with in marshall method            
         } else if(retValue.getClass().equals(String.class)) {
-            //acknowledgement; do nothing for this method
+            //acknowledgment is string "ack"; do nothing for this method
         } else {
             //exception
             //TODO deal with this
@@ -49,7 +48,7 @@ public class ZipCodeServer_stub implements ZipCodeServer
         if(retValue == null) {
             //exception on client side, already dealt with in marshall method
             return null;
-        } else if(retValue.getClass().equals(ZipCodeList.class)) {
+        } else if(retValue.getClass().equals(String.class)) {
             //correct return value
             return (String) retValue;
         } else {
@@ -89,21 +88,14 @@ public class ZipCodeServer_stub implements ZipCodeServer
         if(retValue == null) {
             //exception on client side, already dealt with in marshall method            
         } else if(retValue.getClass().equals(String.class)) {
-            //acknowledgement; do nothing for this method            
+            //acknowledgment is string "ack"; do nothing for this method            
         } else {
             //exception
             //TODO deal with this
         }
     }
     
-    private Object marshall() {
-        try {
-            this.obj.hostName = InetAddress.getLocalHost().getHostName();
-        }
-        catch (UnknownHostException e) {
-            System.out.println("Unknown host exception while getting local hostname.");
-            return null;
-        }        
+    private Object marshall() {        
         
         Socket clientSocket = null;
         Object retValue = null;
@@ -111,13 +103,11 @@ public class ZipCodeServer_stub implements ZipCodeServer
             clientSocket = new Socket(this.serverIP, this.serverPort);
             ObjectOutputStream outStream = new ObjectOutputStream(clientSocket.getOutputStream());
             ObjectInputStream inStream = new ObjectInputStream(clientSocket.getInputStream());
-            this.obj.port = clientSocket.getPort();     //TODO: check if this works: sending the clientSocket port as client port to server
             outStream.writeObject(this.obj);
-            outStream.flush();
-            outStream.close();
-            //Since there is no return value, we send back an ack to confirm server execution completion.
+            outStream.flush();  //can't close outStream yet because it screws up the connection
             retValue = (Object) inStream.readObject();                        
             inStream.close();
+            outStream.close();
             clientSocket.close();            
         }
         catch (UnknownHostException e) {

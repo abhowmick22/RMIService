@@ -7,8 +7,6 @@ public class ClientRmiMsg implements Serializable
 {
     private static final long serialVersionUID = 1L;
     
-    public String hostName;
-    public int port;
     public String methodName;
     public int obj_key;
     public ArrayList<Object> args;    

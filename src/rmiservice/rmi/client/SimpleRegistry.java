@@ -1,121 +1,92 @@
 package rmiservice.rmi.client;
 
-import java.util.*;
-import java.net.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.net.UnknownHostException;
 
-//Needs to act as stub for SimpleRegistry on the server 
-public class SimpleRegistry 
-{ 
-    /*
-    // registry holds its port and host, and connects to it each time. 
-    String Host;
-    int Port;
+public class SimpleRegistry
+{
+    private String regHost;
+    private int regPort;
     
-    // ultra simple constructor.
-    public SimpleRegistry(String IPAdr, int PortNum)
-    {
-    Host = IPAdr;
-    Port = PortNum;
+    public SimpleRegistry(String regHost, int regPort) {
+        this.regHost = regHost;
+        this.regPort = regPort;
     }
-
-    // returns the ROR (if found) or null (if else)
-    public RemoteObjectRef lookup(String serviceName) 
-    throws IOException
-    {
-    // open socket.
-    // it assumes registry is already located by locate registry.
-    // you should usually do try-catch here (and later).
-    Socket soc = new Socket(Host, Port);
-
-    System.out.println("socket made.");
+    
+    /**
+     * Communicates with the registry to look up a service.
+     * @param serviceName The name of the service.
+     * @return The remote object reference for the service.
+     */
+    public RemoteObjectRef lookup(String serviceName) {
         
-    // get TCP streams and wrap them. 
-    BufferedReader in = 
-        new BufferedReader(new InputStreamReader (soc.getInputStream()));
-    PrintWriter out = 
-        new PrintWriter(soc.getOutputStream(), true);
-
-    System.out.println("stream made.");
-
-    // it is locate request, with a service name.
-    out.println("lookup");
-    out.println(serviceName);
-
-    System.out.println("command and service name sent.");
-
-    // branch according to the answer.
-    String res = in.readLine();
-    RemoteObjectRef ror;
-
-    if (res.equals("found"))
-        {
-
-        System.out.println("it is found!.");
-
-        // receive ROR data, witout check.
-        String ro_IPAdr = in.readLine();
-
-        System.out.println(ro_IPAdr);
-
-        int ro_PortNum = Integer.parseInt(in.readLine());
-
-        System.out.println(ro_PortNum);
-
-        int ro_ObjKey = Integer.parseInt(in.readLine());
-
-        System.out.println(ro_ObjKey);
-
-        String ro_InterfaceName = in.readLine();
-
-        System.out.println(ro_InterfaceName);
-
-        
-        // make ROR.
-        ror = new RemoteObjectRef(ro_IPAdr, ro_PortNum, ro_ObjKey, ro_InterfaceName);
+        Socket clientSocket;
+        RemoteObjectRef retValue;
+        try {
+            clientSocket = new Socket(this.regHost, this.regPort);
+            ObjectOutputStream outStream = new ObjectOutputStream(clientSocket.getOutputStream());
+            ObjectInputStream inStream = new ObjectInputStream(clientSocket.getInputStream());
+            ClientRegMsg crm = new ClientRegMsg();
+            crm.message = "lookup";
+            crm.serviceName = serviceName;
+            outStream.writeObject(crm);
+            outStream.flush();  //can't close outStream yet because it screws up the connection
+            retValue = (RemoteObjectRef) inStream.readObject();                        
+            inStream.close();
+            outStream.close();
+            clientSocket.close();            
         }
-    else        
-        {
-        System.out.println("it is not found!.");
-
-        ror = null;
+        catch (UnknownHostException e) {
+            System.out.println("ERROR: Cannot connect to server. Unknown host: " + this.regHost);
+            System.out.println("Please call the method again.");
+            return null;
         }
-
-    // close the socket.
-    soc.close();
-        
-    // return ROR.
-    return ror;
+        catch (IOException e) {
+            System.out.println("ERROR: Cannot connect to server. IOException.");
+            System.out.println("Please call the method again.");
+            return null;
+        }
+        catch (ClassNotFoundException e) {
+            System.out.println("ERROR: Cannot resolve class in the stream from server. Class not found.");
+            System.out.println("Please call the method again.");
+            return null;
+        }
+        return retValue;
     }
-
+    
+    //TODO: what to do with this on the client? Also, for rebind, make registry check if the request is coming from server.
     // rebind a ROR. ROR can be null. again no check, on this or whatever. 
     // I hate this but have no time.
     public void rebind(String serviceName, RemoteObjectRef ror) 
     throws IOException
     {
-    // open socket. same as before.
-    Socket soc = new Socket(Host, Port);
-        
-    // get TCP streams and wrap them. 
-    BufferedReader in = 
-        new BufferedReader(new InputStreamReader (soc.getInputStream()));
-    PrintWriter out = 
-        new PrintWriter(soc.getOutputStream(), true);
-
-    // it is a rebind request, with a service name and ROR.
-    out.println("rebind");
-    out.println(serviceName);
-    out.println(ror.IP_adr);
-    out.println(ror.Port); 
-    out.println(ror.Obj_Key);
-    out.println(ror.Remote_Interface_Name);
-
-    // it also gets an ack, but this is not used.
-    String ack = in.readLine();
-
-    // close the socket.
-    soc.close();
+        // open socket. same as before.
+        Socket soc = new Socket(this.regHost, this.regPort);
+            
+        // get TCP streams and wrap them. 
+        BufferedReader in = 
+            new BufferedReader(new InputStreamReader (soc.getInputStream()));
+        PrintWriter out = 
+            new PrintWriter(soc.getOutputStream(), true);
+    
+        // it is a rebind request, with a service name and ROR.
+        out.println("rebind");
+        out.println(serviceName);
+        out.println(ror.IP_adr);
+        out.println(ror.Port); 
+        out.println(ror.Obj_Key);
+        out.println(ror.Remote_Interface_Name);
+    
+        // it also gets an ack, but this is not used.
+        String ack = in.readLine();
+    
+        // close the socket.
+        soc.close();
     }
-    */
-} 
-  
+}

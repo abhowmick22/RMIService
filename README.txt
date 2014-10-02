@@ -8,3 +8,14 @@ AB:
 2. There is no need to Msg_type in the clientrmimsg because we send it only from client to server, and
 	only for rmi, not for getRegistry. Also, the server should not have this class because the server
 	sends a return value, or the reference object as a single object, and does not need to be wrapped in clientmsgrmi.
+	
+	
+Communication: 
+1. No need to send client hostname and port because server can get it from the accepted socket connection. 
+	i. socket.getPort() gives the port of the other guy.
+	socket.getLocalPort() gives your own port.
+	ii. also, socket.getInetAddress().getHostName() gives the other guy's hostname.
+	
+	
+TODOs:
+1. check for null for all values returned by helper or stub in all client and server classes.

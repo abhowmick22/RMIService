@@ -22,19 +22,34 @@ public class ZipCodeClient {
      // (2) a service name.
      // (3) a file name as above. 
      public static void main(String[] args) 
-     throws IOException
      {
          String host = args[0];
          int port = Integer.parseInt(args[1]);
          String serviceName = args[2];
-         BufferedReader in = new BufferedReader(new FileReader(args[3]));
+         BufferedReader in = null;
+        try {
+            in = new BufferedReader(new FileReader(args[3]));
+        }
+        catch (FileNotFoundException e) {
+            System.out.println("File not found: "+args[3]);            
+            System.exit(0);
+        }
 
-         // locate the registry and get ror.
+         // locate the registry and get ror
          SimpleRegistry sr = LocateSimpleRegistry.getRegistry(host, port);
+         if(sr == null) {
+             System.exit(0);
+         }
          RemoteObjectRef ror = sr.lookup(serviceName);
-
-         // get (create) the stub out of ror.
+         if(ror == null) {
+             System.exit(0);
+         }
+         
+         // get (create) the stub out of ror
          ZipCodeServer zcs = (ZipCodeServer) ror.localise();
+         if(zcs == null) {
+             System.exit(0);
+         }
         
          // reads the data and make a "local" zip code list.
          // later this is sent to the server.
@@ -43,16 +58,22 @@ public class ZipCodeClient {
          boolean flag = true;
          while (flag)
          {
-             String city = in.readLine();
-             String code = in.readLine();
-             if (city == null)
-                 flag = false;
-             else
-                 l = new ZipCodeList(city.trim(), code.trim(), l);
+             String city;
+             try {
+                 city = in.readLine();
+                 String code = in.readLine();
+                 if (city == null)
+                     flag = false;
+                 else
+                     l = new ZipCodeList(city.trim(), code.trim(), l);
+             } catch (IOException e) {
+                 System.out.println("IOException while creating list.");
+                 System.exit(0);
+             }             
          }
-         // the final value of l should be the initial head of 
-         // the list.
          
+         // the final value of l should be the initial head of 
+         // the list.         
          // we print out the local zipcodelist.
          System.out.println("This is the original list.");
          ZipCodeList temp = l;
@@ -90,8 +111,7 @@ public class ZipCodeClient {
                  ("city: "+temp.city+", "+
                          "code: "+temp.ZipCode);
              temp=temp.next;
-         }               
-         
+         }                        
          // test the printall.
          System.out.println("\n We test the remote site printing.");
          // here is a test.
