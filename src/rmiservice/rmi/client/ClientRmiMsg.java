@@ -11,6 +11,5 @@ public class ClientRmiMsg implements Serializable
     public int port;
     public String methodName;
     public int obj_key;
-    public String interfaceName;
     public ArrayList<Object> args;    
 }

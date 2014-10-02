@@ -14,167 +14,82 @@ public class ZipCodeServer_stub implements ZipCodeServer
     private String serverIP;
     private int serverPort;
     
-    public ZipCodeServer_stub(String IP, int port, int obj_key) {
-        this.serverIP = IP;
-        this.serverPort = port;        
+    public ZipCodeServer_stub(String serverIP, int serverPort, int obj_key) {
+        this.serverIP = serverIP;
+        this.serverPort = serverPort;        
         this.obj = new ClientRmiMsg();
         this.obj.obj_key = obj_key;        
-        this.obj.interfaceName = "ZipCodeServer";        
-        this.obj.args = new ArrayList<Object>();        
+        this.obj.args = new ArrayList<Object>();                
     }
     
     @Override
     public void initialise(ZipCodeList newList)
     {
-        try {
-            this.obj.hostName = InetAddress.getLocalHost().getHostName();
-        }
-        catch (UnknownHostException e) {
-            System.out.println("Unknown host exception while getting local hostname.");
-            return;
-        }        
         this.obj.methodName = "initialise";
         this.obj.args.clear();
         this.obj.args.add(newList);
-        
-        Socket clientSocket = null;
-        try {
-            clientSocket = new Socket(this.serverIP, this.serverPort);
-            ObjectOutputStream outStream = new ObjectOutputStream(clientSocket.getOutputStream());
-            ObjectInputStream inStream = new ObjectInputStream(clientSocket.getInputStream());
-            outStream.writeObject(this.obj);
-            outStream.flush();
-            outStream.close();
-            //Since there is no return value, we send back an ack to confirm server execution completion.
-            String ack = (String) inStream.readObject();                        
-            inStream.close();
-            clientSocket.close();            
+        Object retValue = marshall();
+        if(retValue == null) {
+            //exception on client side, already dealt with in marshall method            
+        } else if(retValue.getClass().equals(String.class)) {
+            //acknowledgement; do nothing for this method
+        } else {
+            //exception
+            //TODO deal with this
         }
-        catch (UnknownHostException e) {
-            System.out.println("ERROR: Cannot connect to server. Unknown host: " + this.serverIP);
-            System.out.println("Please call the method again.");
-            return;
-        }
-        catch (IOException e) {
-            System.out.println("ERROR: Cannot connect to server. IOException.");
-            System.out.println("Please call the method again.");
-            return;
-        }
-        catch (ClassNotFoundException e) {
-            System.out.println("ERROR: Cannot resolve class in the stream from server. Class not found.");
-            System.out.println("Please call the method again.");
-            return;
-        }
-      
     }
 
     @Override
     public String find(String city)
     {
-        try {
-            this.obj.hostName = InetAddress.getLocalHost().getHostName();
-        }
-        catch (UnknownHostException e) {
-            System.out.println("Unknown host exception while getting local hostname.");
-            return null;
-        }        
         this.obj.methodName = "find";
         this.obj.args.clear();
         this.obj.args.add(city);
+        Object retValue = marshall();   
+        if(retValue == null) {
+            //exception on client side, already dealt with in marshall method
+            return null;
+        } else if(retValue.getClass().equals(ZipCodeList.class)) {
+            //correct return value
+            return (String) retValue;
+        } else {
+            //exception
+            //TODO deal with this
+            return null;
+        }
         
-        Socket clientSocket = null;
-        String zipCode = null;
-        try {
-            clientSocket = new Socket(this.serverIP, this.serverPort);
-            ObjectOutputStream outStream = new ObjectOutputStream(clientSocket.getOutputStream());
-            ObjectInputStream inStream = new ObjectInputStream(clientSocket.getInputStream());
-            outStream.writeObject(this.obj);
-            outStream.flush();
-            outStream.close();                        
-            zipCode = (String) inStream.readObject();                       
-            inStream.close();
-            clientSocket.close();            
-        }
-        catch (UnknownHostException e) {
-            System.out.println("ERROR: Cannot connect to server. Unknown host: " + this.serverIP);
-            System.out.println("Please call the method again.");
-            return null;
-        }
-        catch (IOException e) {
-            System.out.println("ERROR: Cannot connect to server. IOException.");
-            System.out.println("Please call the method again.");
-            return null;
-        }
-        catch (ClassNotFoundException e) {
-            System.out.println("ERROR: Cannot resolve class in the stream from server. Class not found.");
-            System.out.println("Please call the method again.");
-            return null;
-        }      
-        return zipCode;
     }
 
     @Override
     public ZipCodeList findAll()
     {
-        try {
-            this.obj.hostName = InetAddress.getLocalHost().getHostName();
-        }
-        catch (UnknownHostException e) {
-            System.out.println("Unknown host exception while getting local hostname.");
-            return null;
-        }        
         this.obj.methodName = "findAll";
-        this.obj.args.clear();
+        this.obj.args.clear();        
+        Object retValue = marshall();   
+        if(retValue == null) {
+            //exception on client side, already dealt with in marshall method
+            return null;
+        } else if(retValue.getClass().equals(ZipCodeList.class)) {
+            //correct return value
+            return (ZipCodeList) retValue;
+        } else {
+            //exception
+            //TODO deal with this
+            return null;
+        }
         
-        Socket clientSocket = null;
-        ZipCodeList zipCodeList = null;
-        try {
-            clientSocket = new Socket(this.serverIP, this.serverPort);
-            ObjectOutputStream outStream = new ObjectOutputStream(clientSocket.getOutputStream());
-            ObjectInputStream inStream = new ObjectInputStream(clientSocket.getInputStream());
-            outStream.writeObject(this.obj);
-            outStream.flush();
-            outStream.close();                        
-            zipCodeList = (ZipCodeList) inStream.readObject();                                   
-            inStream.close();
-            clientSocket.close();            
-        }
-        catch (UnknownHostException e) {
-            System.out.println("ERROR: Cannot connect to server. Unknown host: " + this.serverIP);
-            System.out.println("Please call the method again.");
-            return null;
-        }
-        catch (IOException e) {
-            System.out.println("ERROR: Cannot connect to server. IOException.");
-            System.out.println("Please call the method again.");
-            return null;
-        }
-        catch (ClassNotFoundException e) {
-            System.out.println("ERROR: Cannot resolve class in the stream from server. Class not found.");
-            System.out.println("Please call the method again.");
-            return null;
-        }      
-        return zipCodeList;
     }
 
     @Override
     public void printAll()
-    {
-        try {
-            this.obj.hostName = InetAddress.getLocalHost().getHostName();
-        }
-        catch (UnknownHostException e) {
-            System.out.println("Unknown host exception while getting local hostname.");
-            return;
-        }        
+    {       
         this.obj.methodName = "printAll";
         this.obj.args.clear();
-        Object retValue = marshall();   //do nothing because it's just an ack
+        Object retValue = marshall();
         if(retValue == null) {
-            return;
+            //exception on client side, already dealt with in marshall method            
         } else if(retValue.getClass().equals(String.class)) {
-            //acknowledgement; do nothing for this method
-            return;
+            //acknowledgement; do nothing for this method            
         } else {
             //exception
             //TODO deal with this
@@ -196,6 +111,7 @@ public class ZipCodeServer_stub implements ZipCodeServer
             clientSocket = new Socket(this.serverIP, this.serverPort);
             ObjectOutputStream outStream = new ObjectOutputStream(clientSocket.getOutputStream());
             ObjectInputStream inStream = new ObjectInputStream(clientSocket.getInputStream());
+            this.obj.port = clientSocket.getPort();     //TODO: check if this works: sending the clientSocket port as client port to server
             outStream.writeObject(this.obj);
             outStream.flush();
             outStream.close();
