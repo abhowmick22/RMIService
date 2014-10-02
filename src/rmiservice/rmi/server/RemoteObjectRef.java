@@ -1,7 +1,6 @@
 package rmiservice.rmi.server;
 
 import java.lang.reflect.InvocationTargetException;
-import java.net.UnknownHostException;
 
 public class RemoteObjectRef
 {
