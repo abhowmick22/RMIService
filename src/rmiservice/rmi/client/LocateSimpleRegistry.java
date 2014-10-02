@@ -13,7 +13,7 @@ public class LocateSimpleRegistry
             Socket clientSocket = new Socket(regHost, regPort);
             ObjectOutputStream outStream = new ObjectOutputStream(clientSocket.getOutputStream());
             ObjectInputStream inStream = new ObjectInputStream(clientSocket.getInputStream());
-            ClientRegMsg crm = new ClientRegMsg();
+            RegistryMsg crm = new RegistryMsg();
             crm.message = "Who are you?";
             outStream.writeObject(crm);
             outStream.flush();  //can't close outStream yet because it screws up the connection

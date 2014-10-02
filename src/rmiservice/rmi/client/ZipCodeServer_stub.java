@@ -27,6 +27,8 @@ public class ZipCodeServer_stub implements ZipCodeServer
         this.obj.methodName = "initialise";
         this.obj.args.clear();
         this.obj.args.add(newList);
+        this.obj.argParams.clear();
+        this.obj.argParams.add(ZipCodeList.class);
         Object retValue = marshall();
         if(retValue == null) {
             //exception on client side, already dealt with in marshall method            
@@ -44,6 +46,8 @@ public class ZipCodeServer_stub implements ZipCodeServer
         this.obj.methodName = "find";
         this.obj.args.clear();
         this.obj.args.add(city);
+        this.obj.argParams.clear();
+        this.obj.argParams.add(String.class);
         Object retValue = marshall();   
         if(retValue == null) {
             //exception on client side, already dealt with in marshall method
@@ -63,7 +67,8 @@ public class ZipCodeServer_stub implements ZipCodeServer
     public ZipCodeList findAll()
     {
         this.obj.methodName = "findAll";
-        this.obj.args.clear();        
+        this.obj.args.clear();      
+        this.obj.argParams.clear();
         Object retValue = marshall();   
         if(retValue == null) {
             //exception on client side, already dealt with in marshall method
@@ -84,6 +89,7 @@ public class ZipCodeServer_stub implements ZipCodeServer
     {       
         this.obj.methodName = "printAll";
         this.obj.args.clear();
+        this.obj.argParams.clear();
         Object retValue = marshall();
         if(retValue == null) {
             //exception on client side, already dealt with in marshall method            

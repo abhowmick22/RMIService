@@ -32,7 +32,7 @@ public class SimpleRegistry
             clientSocket = new Socket(this.regHost, this.regPort);
             ObjectOutputStream outStream = new ObjectOutputStream(clientSocket.getOutputStream());
             ObjectInputStream inStream = new ObjectInputStream(clientSocket.getInputStream());
-            ClientRegMsg crm = new ClientRegMsg();
+            RegistryMsg crm = new RegistryMsg();
             crm.message = "lookup";
             crm.serviceName = serviceName;
             outStream.writeObject(crm);
