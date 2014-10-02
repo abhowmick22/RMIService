@@ -36,7 +36,7 @@ public class RemoteObjectRef
         
         Object o;
         try {
-            o = c.getConstructor(String.class, Integer.class).newInstance(this.IP_adr, this.Port);
+            o = c.getConstructor(String.class, Integer.class).newInstance(this.IP_adr, this.Port, this.Obj_Key);
         }
         catch (InstantiationException e) {
             System.out.println("Could not instantiate class: "+ className);

@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 public class ZipCodeList implements Serializable
 {
+    private static final long serialVersionUID = 1L;
+    
     String city;
     String ZipCode;
     ZipCodeList next;

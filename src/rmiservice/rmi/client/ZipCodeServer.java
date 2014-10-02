@@ -1,7 +1,7 @@
 package rmiservice.rmi.client;
 
 
-public interface ZipCodeServer // extends YourRemote or whatever
+public interface ZipCodeServer
 {
     public void initialise(ZipCodeList newlist);
     public String find(String city);
