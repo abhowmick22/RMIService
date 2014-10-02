@@ -6,10 +6,10 @@ import java.io.*;
 //in your design, however, you can do so.
 //it is assumed that this is not directly called but as in:
 //
-//java yourRMI ZipCodeServerImpl registryhost resigstryport servicename
+//java yourRMI ZipCodeServerImpl registryhost registryport servicename
 //
 //therefore it does not contain main: new object creation, binding etc. is 
-//done via your RMI.
+//done via yourRMI
 
 public class ZipCodeServerImpl implements ZipCodeServer
 {
@@ -21,7 +21,7 @@ public class ZipCodeServerImpl implements ZipCodeServer
         l=null;
     }
 
-    // when this is called, marshalled data
+    // when this is called, unmarshalled data
     // should be sent to this remote object,
     // and reconstructed.
     public void initialise(ZipCodeList newlist)

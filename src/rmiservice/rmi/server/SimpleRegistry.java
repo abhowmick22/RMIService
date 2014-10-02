@@ -67,7 +67,7 @@ public class SimpleRegistry
         if (res.equals("found"))
         {    
             System.out.println("it is found!.");    
-            // receive ROR data, witout check.
+            // receive ROR data, without check.
             String ro_IPAdr = null, ro_InterfaceName = null;
             int ro_PortNum = 0, ro_ObjKey = 0;
             try {

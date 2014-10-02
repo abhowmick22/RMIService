@@ -3,6 +3,10 @@ package rmiservice.rmi.server;
 import java.net.*;
 import java.io.*;
 
+/*
+This will be used by yourRMI to get a reference to the SimpleRegistry
+Listening from the client stub for this class will be done by yourRMI
+*/
 public class LocateSimpleRegistry 
 { 
     // this is the SOLE static method.

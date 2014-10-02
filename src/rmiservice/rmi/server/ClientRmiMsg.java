@@ -1,4 +1,4 @@
-package rmiservice.rmi.client;
+package rmiservice.rmi.server;
 
 import java.io.Serializable;
 import java.util.ArrayList;
