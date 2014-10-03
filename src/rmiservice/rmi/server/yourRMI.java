@@ -75,12 +75,12 @@ public class yourRMI
         regService.start();
         
         // Get hold of in/out streams for communicating with registry
-        Socket s = new Socket(host, port);
+        Socket s = new Socket(registryHost, registryPort);
         ObjectOutputStream toRegistry = new ObjectOutputStream(s.getOutputStream());
-        ObjectInputStream fromRegistry = new ObjectInputStream(s.getInputStream());
+        //ObjectInputStream fromRegistry = new ObjectInputStream(s.getInputStream());
         
         // Instantiate objects of every serviceName, create the map RORtbl and bind these services
-        Class initialclass;
+        Class<?> initialclass;
         Object o;
         RORtbl tbl = new RORtbl();
         Integer objkey = 0;
