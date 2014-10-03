@@ -19,3 +19,5 @@ Communication:
 	
 TODOs:
 1. check for null for all values returned by helper or stub in all client and server classes.
+2. All objects which implement “Remote” are passed by reference. Other objects are passed by value (serialized)
+3. 
