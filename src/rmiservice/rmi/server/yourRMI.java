@@ -43,6 +43,7 @@ Which is simpler, I cannot say, since both have their
 own simpleness and complexity.
 */
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.*;
@@ -58,7 +59,6 @@ public class yourRMI
     // reference to the remote object.
     // As you can see, the exception handling is not done at all.
     public static void main(String args[])    
-    throws Exception
     {
         String registryHost = args[0];
         int registryPort = Integer.parseInt(args[1]);
@@ -66,11 +66,15 @@ public class yourRMI
         // TODO : Take in all the service names
         for (int i = 2; i< args.length; i++)
         	serviceNames.add(args[i]);
+        
+        RORtbl tbl = new RORtbl();
     
 		// List of serviceNames, known at compile time for now
         
         // The RMI dispatcher is available on famous port 12345
-        host = (InetAddress.getLocalHost()).getHostName();
+        try {
+			host = (InetAddress.getLocalHost()).getHostName();
+		
         port = 12345;
         
         // Start a RegistryService thread - in the future this can be a process in a different JVM
@@ -89,7 +93,7 @@ public class yourRMI
         // Instantiate objects of every serviceName, create the map RORtbl and bind these services
         Class<?> initialclass;
         Object o;
-        RORtbl tbl = new RORtbl();
+
         Integer objkey = 0;
         for (String objectName : serviceNames){
         	initialclass = Class.forName(objectName + "_Impl");	// gives you ZipCodeServerImpl
@@ -109,24 +113,30 @@ public class yourRMI
         
         toRegistry.close();
         s.close();
- 
-        // it now have two classes from MainClassName: 
-        // (1) the class itself (say ZipCodeServerImpl) and
-        // (2) its skeleton.
-        //Class initialclass = Class.forName(InitialClassName);
-        //Class initialskeleton = Class.forName(InitialClassName+"_skel");
- 
+        
+        } catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-        // create a socket to listen for RMI requests.
-        ServerSocket serverSoc = new ServerSocket(port);
-        Integer tid = 0;
-
+        
         // Now we go into a loop.
         // Look at rmiregistry.java for a simple server programming.
         // The code is far from optimal but in any way you can get basics.
         // Actually you should use multiple threads, or this easily
         // deadlocks. But for your implementation I do not ask it.
         // For design, consider well.
+		Integer tid = 0;
+		Socket client = null;
+		
+		// socket to listen for RMI requests
+		ServerSocket serverSoc = null;
+		try {
+			serverSoc = new ServerSocket(port);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
         while (true)
         {
             // (1) receives an invocation request.
@@ -144,12 +154,29 @@ public class yourRMI
             //     the source of the invoker.
             // (7) closes the socket.
         	
-        	Socket client = serverSoc.accept();
-        	ClientRmiMsg msg = (ClientRmiMsg) new ObjectInputStream(client.getInputStream()).readObject();
-        	Object obj = tbl.findObj(msg.obj_key);
-        	new Thread(new RemoteObjThread(obj, msg, client), (tid++).toString()).start();
         	
-        	// dispatcher's work is done hopefully
+			try {
+				client = serverSoc.accept();
+	        	ClientRmiMsg msg;
+				msg = (ClientRmiMsg) new ObjectInputStream(client.getInputStream()).readObject();
+				Object obj = tbl.findObj(msg.obj_key);
+	        	new Thread(new RemoteObjThread(obj, msg, client), (tid++).toString()).start();
+	        	
+	        	// dispatcher's work is done hopefully
+	        	
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+				RemoteException rex = new RemoteException();
+	        	rex.type = e.getClass();
+	        	rex.message = "RemoteException";
+	        	try {
+					new ObjectOutputStream(client.getOutputStream()).writeObject(rex);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}         	
         }
     }
 
