@@ -31,12 +31,16 @@ public class ZipCodeServer_stub implements ZipCodeServer
         this.obj.argParams.add(ZipCodeList.class);
         Object retValue = marshall();
         if(retValue == null) {
-            //exception on client side, already dealt with in marshall method            
+            //exception on client side, already dealt with in marshall method   
+            return;
         } else if(retValue.getClass().equals(String.class)) {
             //acknowledgment is string "ack"; do nothing for this method
+            return;
         } else {
-            //exception
-            //TODO deal with this
+          //exception
+            System.out.println("Server side exception:");
+            System.out.println("Message from server: " + ((RemoteException) retValue).message);
+            System.out.println("Exception class: " + ((RemoteException) retValue).type.getName());
         }
     }
 
@@ -57,7 +61,9 @@ public class ZipCodeServer_stub implements ZipCodeServer
             return (String) retValue;
         } else {
             //exception
-            //TODO deal with this
+            System.out.println("Server side exception:");
+            System.out.println("Message from server: " + ((RemoteException) retValue).message);
+            System.out.println("Exception class: " + ((RemoteException) retValue).type.getName());
             return null;
         }
         
@@ -78,7 +84,9 @@ public class ZipCodeServer_stub implements ZipCodeServer
             return (ZipCodeList) retValue;
         } else {
             //exception
-            //TODO deal with this
+            System.out.println("Server side exception:");
+            System.out.println("Message from server: " + ((RemoteException) retValue).message);
+            System.out.println("Exception class: " + ((RemoteException) retValue).type.getName());
             return null;
         }
         
@@ -92,12 +100,16 @@ public class ZipCodeServer_stub implements ZipCodeServer
         this.obj.argParams.clear();
         Object retValue = marshall();
         if(retValue == null) {
-            //exception on client side, already dealt with in marshall method            
+            //exception on client side, already dealt with in marshall method
+            return;
         } else if(retValue.getClass().equals(String.class)) {
-            //acknowledgment is string "ack"; do nothing for this method            
+            //acknowledgment is string "ack"; do nothing for this method  
+            return;
         } else {
-            //exception
-            //TODO deal with this
+          //exception
+            System.out.println("Server side exception:");
+            System.out.println("Message from server: " + ((RemoteException) retValue).message);
+            System.out.println("Exception class: " + ((RemoteException) retValue).type.getName());
         }
     }
     
