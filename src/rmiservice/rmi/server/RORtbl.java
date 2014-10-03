@@ -10,24 +10,27 @@ public class RORtbl
 {
  // I omit all instance variables. you can use hash table, for example.
  // The table would have a key by ROR.
+	private Hashtable<String, Object> table;
  
  // make a new table. 
  public RORtbl()
- {}
+ {
+	 this.table = new Hashtable<String, Object>();
+ }
 
  // add a remote object to the table. 
  // Given an object, you can get its class, hence its remote interface.
  // Using it, you can construct a ROR. 
  // The host and port are not used unless it is exported outside.
  // In any way, it is better to have it for uniformity.
- public void addObj(Object o, String objkey)
+ public void addObj(Object obj, String obj_key)
  {
+	 this.table.put(obj_key, obj);
  }
 
  // given ror, find the corresponding object.
  public Object findObj(int obj_key)
  {
-     // if you use a hash table this is easy.
-     return null;
+	 return this.table.get(obj_key);
  }
 }

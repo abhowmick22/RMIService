@@ -1,6 +1,8 @@
 package rmiservice.rmi.server;
 
 import java.net.Socket;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -28,7 +30,9 @@ public class RemoteObjThread implements Runnable{
 		
 		try {
 			this.method = object.getClass().getMethod(this.message.methodName, params);
-			this.method.invoke(this.object, this.message.args);
+			Object result = this.method.invoke(this.object, this.message.args);
+			// write back result to client
+			new ObjectOutputStream(this.client.getOutputStream()).writeObject(result);
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -44,10 +48,11 @@ public class RemoteObjThread implements Runnable{
 		} catch (InvocationTargetException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
-		
-		
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+
 	}
 
 }
