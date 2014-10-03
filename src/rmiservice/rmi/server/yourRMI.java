@@ -21,7 +21,7 @@ package rmiservice.rmi.server;
  * InitialClassName is the application server class
  * One object/one serviceName per application server class
  * OR 
- * javac yourRMI registryHost registryPort servicename1
+ * java yourRMI registryHost registryPort servicename1(eg. ZipCodeServer)
  * Assume all InitialClassNames are known at start, and it binds an object of each type
  * However, in the future - let it take a list of available InitialClassNames as an argument
  */
@@ -62,7 +62,10 @@ public class yourRMI
     {
         String registryHost = args[0];
         int registryPort = Integer.parseInt(args[1]);
-        serviceNames.add(args[2]);
+        
+        // TODO : Take in all the service names
+        for (int i = 2; i< args.length; i++)
+        	serviceNames.add(args[i]);
     
 		// List of serviceNames, known at compile time for now
         
@@ -73,6 +76,10 @@ public class yourRMI
         // Start a RegistryService thread - in the future this can be a process in a different JVM
         Thread regService = new Thread(new RegistryService());
         regService.start();
+        
+        // TODO : better way to check if it is up ?
+        while(!regService.isAlive());
+
         
         // Get hold of in/out streams for communicating with registry
         Socket s = new Socket(registryHost, registryPort);
@@ -85,7 +92,7 @@ public class yourRMI
         RORtbl tbl = new RORtbl();
         Integer objkey = 0;
         for (String objectName : serviceNames){
-        	initialclass = Class.forName(objectName + "Impl");	// gives you ZipCodeServerImpl
+        	initialclass = Class.forName(objectName + "_Impl");	// gives you ZipCodeServerImpl
         	o = initialclass.newInstance();
         	tbl.addObj(o, objkey.toString());
         	objkey++;
@@ -97,7 +104,11 @@ public class yourRMI
         	drm.serviceName = objectName;
         	drm.refObject = ror;
         	toRegistry.writeObject(drm);
+        	toRegistry.flush();
         }      
+        
+        toRegistry.close();
+        s.close();
  
         // it now have two classes from MainClassName: 
         // (1) the class itself (say ZipCodeServerImpl) and

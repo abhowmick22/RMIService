@@ -7,8 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 
-// This one listens for Registry requests and handles the SimpleRegistry using
-// the LocateSimpleregistry class
+// This one listens for Registry requests and handles the SimpleRegistry directly
 public class RegistryService implements Runnable{
 
 	@Override

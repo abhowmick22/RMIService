@@ -32,7 +32,12 @@ public class RemoteObjThread implements Runnable{
 			this.method = object.getClass().getMethod(this.message.methodName, params);
 			Object result = this.method.invoke(this.object, this.message.args);
 			// write back result to client
-			new ObjectOutputStream(this.client.getOutputStream()).writeObject(result);
+			ObjectOutputStream out = new ObjectOutputStream(this.client.getOutputStream());
+			out.writeObject(result);
+			
+			out.close();
+			client.close();
+			
 		} catch (SecurityException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

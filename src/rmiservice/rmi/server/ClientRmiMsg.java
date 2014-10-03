@@ -10,6 +10,5 @@ public class ClientRmiMsg implements Serializable
     public String methodName;
     public int obj_key;
     public ArrayList<Object> args;       
-    @SuppressWarnings("rawtypes")   //TODO: keep this?
     public ArrayList<Class<?> > argParams;
 }
