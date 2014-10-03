@@ -72,9 +72,10 @@ public class yourRMI
 		// List of serviceNames, known at compile time for now
         
         // The RMI dispatcher is available on famous port 12345
-        try {
-			host = (InetAddress.getLocalHost()).getHostName();
-		
+        
+		try {
+		host = (InetAddress.getLocalHost()).getHostName();
+
         port = 12345;
         
         // Start a RegistryService thread - in the future this can be a process in a different JVM
@@ -113,11 +114,11 @@ public class yourRMI
         
         toRegistry.close();
         s.close();
-        
-        } catch (Exception e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		} 
+ 
 
         
         // Now we go into a loop.
@@ -137,47 +138,53 @@ public class yourRMI
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		
         while (true)
         {
             // (1) receives an invocation request.
             // (2) creates a socket and input/output streams.
-            // (3) gets the invocation, in martiallled form.
+            // (3) gets the invocation, in marshaled form.
             // (4) gets the real object reference from tbl.
             // (5) Either:
             //      -- using the interface name, asks the skeleton,
-            //         together with the object reference, to unmartial
+            //         together with the object reference, to unmarshal
             //         and invoke the real object.
             //      -- or do unmarshalling directly and invokes that
             //         object directly.
-            // (6) receives the return value, which (if not marshalled
+            // (6) receives the return value, which (if not marshaled
             //     you should marshal it here) and send it out to the 
             //     the source of the invoker.
             // (7) closes the socket.
         	
         	
-			try {
+			
+				try {
 				client = serverSoc.accept();
+				
 	        	ClientRmiMsg msg;
 				msg = (ClientRmiMsg) new ObjectInputStream(client.getInputStream()).readObject();
 				Object obj = tbl.findObj(msg.obj_key);
 	        	new Thread(new RemoteObjThread(obj, msg, client), (tid++).toString()).start();
 	        	
 	        	// dispatcher's work is done hopefully
-	        	
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				//e.printStackTrace();
-				RemoteException rex = new RemoteException();
-	        	rex.type = e.getClass();
-	        	rex.message = "RemoteException";
-	        	try {
-					new ObjectOutputStream(client.getOutputStream()).writeObject(rex);
-				} catch (IOException e1) {
+				} catch (IOException e) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					e.printStackTrace();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					//e.printStackTrace();
+					RemoteException rex = new RemoteException();
+					rex.type = e.getClass();
+		        	rex.message = "RemoteException";
+		        	try {
+						new ObjectOutputStream(client.getOutputStream()).writeObject(rex);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
-			}         	
-        }
+			
+	   }
     }
 
     

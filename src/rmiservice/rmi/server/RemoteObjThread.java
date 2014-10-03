@@ -28,8 +28,10 @@ public class RemoteObjThread implements Runnable{
 		// get a Class<?>[] for params to be fed into reflection API
 		Class<?>[] params = this.message.argParams.toArray(new Class<?>[this.message.argParams.size()]);
 		
-		try {
+		
+			try {
 			this.method = object.getClass().getMethod(this.message.methodName, params);
+			 
 			Object result = this.method.invoke(this.object, this.message.args);
 			// write back result to client
 			ObjectOutputStream out = new ObjectOutputStream(this.client.getOutputStream());
@@ -37,20 +39,26 @@ public class RemoteObjThread implements Runnable{
 			
 			out.close();
 			client.close();
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-			RemoteException rex = new RemoteException();
-        	rex.type = e.getClass();
-        	rex.message = "RemoteException";
-        	try {
-				new ObjectOutputStream(client.getOutputStream()).writeObject(rex);
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
 			}
-		}
+			catch (SecurityException|NoSuchMethodException|IllegalArgumentException|
+					IllegalAccessException|InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+				RemoteException rex = new RemoteException();
+	        	rex.type = e.getClass();
+	        	rex.message = "RemoteException";
+	        	try {
+					new ObjectOutputStream(client.getOutputStream()).writeObject(rex);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			} 
+			catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 
 	}
 
