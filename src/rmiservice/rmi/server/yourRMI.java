@@ -64,9 +64,9 @@ public class yourRMI
         int registryPort = Integer.parseInt(args[1]);
         
         // TODO : Take in all the service names
-        for (int i = 2; i< args.length; i++)
+        for (int i = 2; i< args.length; i++) {
         	serviceNames.add(args[i]);
-        
+        }
         RORtbl tbl = new RORtbl();
     
 		// List of serviceNames, known at compile time for now
@@ -98,6 +98,21 @@ public class yourRMI
         Integer objkey = 0;
         for (String objectName : serviceNames){
         	initialclass = Class.forName(objectName + "_Impl");	// gives you ZipCodeServerImpl
+        	boolean checkInterfaceExists = false;
+        	for(Class<?> inter : initialclass.getInterfaces()) {
+        	    if(inter.getName().equals("YourRemote")) {        	        
+        	        checkInterfaceExists = true;
+        	        break;
+        	    }
+        	}
+        	if(!checkInterfaceExists) {
+        	    //the service does not extent YourRemote interface, so can't instantiate 
+        	    //it and add to registry
+        	    System.out.println(objectName + " does not extend YourRemote interface and "
+        	            + "hence cannot be instantiated and bound to registry.");
+        	    continue;
+        	}
+        	
         	o = initialclass.newInstance();
         	tbl.addObj(o, objkey.toString());
         	objkey++;
