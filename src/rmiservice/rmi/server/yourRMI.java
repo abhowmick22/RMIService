@@ -100,7 +100,7 @@ public class yourRMI
         	initialclass = Class.forName(objectName + "_Impl");	// gives you ZipCodeServerImpl
         	boolean checkInterfaceExists = false;
         	for(Class<?> inter : initialclass.getInterfaces()) {
-        	    if(inter.getName().equals("YourRemote")) {        	        
+        	    if(inter.getName().equals("rmiservice.rmi.server.YourRemote")) {        	        
         	        checkInterfaceExists = true;
         	        break;
         	    }
