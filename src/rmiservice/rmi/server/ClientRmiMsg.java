@@ -6,16 +6,10 @@ import java.util.ArrayList;
 public class ClientRmiMsg implements Serializable
 {
     private static final long serialVersionUID = 1L;
-    
-    public String hostName;
-    public int port;
+
     public String methodName;
     public int obj_key;
-    public String interfaceName;
-    public ArrayList<Object> args;    
-    
-    
-    // type : 
-    // RMI_request, RMI_response, Registry_request, Registry_response
-    public String msgType;
+    public ArrayList<Object> args;       
+    @SuppressWarnings("rawtypes")   //TODO: keep this?
+    public ArrayList<Class> argParams;
 }

@@ -32,14 +32,14 @@ public class testRebind
  System.out.println("Interface name is "+ror.Remote_Interface_Name);
 
  // locate.
- SimpleRegistry sr = LocateSimpleRegistry.getRegistry(host, port);
+ SimpleRegistry sr = new SimpleRegistry();
 
  System.out.println("located."+sr+"/n");
  
  if (sr != null)
      {
      // bind.
-     sr.rebind(ServiceName, ror);
+     sr.bind(ServiceName, ror);
 
      // test the binding by looking up.
      RemoteObjectRef ror2 = sr.lookup(ServiceName);
