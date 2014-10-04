@@ -65,6 +65,10 @@ public class RegistryService implements Runnable{
 				outStream.writeObject(reply);
 			}
 			
+			inStream.close();
+			outStream.close();
+			client.close();
+			
 			}
 			catch (IOException e) {
 			// TODO Auto-generated catch block
