@@ -12,7 +12,6 @@ public class RemoteObjThread implements Runnable{
 	public Object object;
 	public ClientRmiMsg message;
 	public Socket client;
-	public Method method;
 	
 	public RemoteObjThread(Object obj, ClientRmiMsg msg, Socket client) {
 		// TODO Auto-generated constructor stub
@@ -26,6 +25,9 @@ public class RemoteObjThread implements Runnable{
 		// get a Class<?>[] for params to be fed into reflection API
 		Class<?>[] params = this.message.argParams.toArray(new Class<?>[this.message.argParams.size()]);		
 		ObjectOutputStream out = null;
+		Object result = null;
+		
+		//create stream to send result back to client
         try {
             out = new ObjectOutputStream(this.client.getOutputStream());
         }
@@ -33,47 +35,53 @@ public class RemoteObjThread implements Runnable{
             // TODO handle this, print message on server side
             e1.printStackTrace();   //can't communicate this back to the client. also can't process forward.
             return;
-        }
+        }        
         
+        //execute method, and get return value if there is one
 		try {
-			this.method = object.getClass().getMethod(this.message.methodName, params);			 
-			Object result = this.method.invoke(this.object, this.message.args);
-			// write back result to client
-			out.writeObject(result);			
+			Method method = object.getClass().getMethod(this.message.methodName, params);
+			if(method.getReturnType().equals(Void.TYPE)) {
+			    method.invoke(this.object, this.message.args);
+			} else {
+			    result = method.invoke(this.object, this.message.args);
+			}
 		} catch (SecurityException e) {   //could have combined all these into one, but can't compile that on GHC machines
-            GenerateRemoteException(e);                
+            GenerateRemoteException(e, out);   
+            return;
         } catch (NoSuchMethodException e) {
-            GenerateRemoteException(e);
+            GenerateRemoteException(e, out);
+            return;
         } catch (IllegalArgumentException e) {
-            GenerateRemoteException(e);
+            GenerateRemoteException(e, out);
+            return;
         } catch (IllegalAccessException e) {
-            GenerateRemoteException(e);
+            GenerateRemoteException(e, out);
+            return;
         } catch (InvocationTargetException e) {
-            GenerateRemoteException(e);
+            GenerateRemoteException(e, out);
+            return;
         }
-		catch (IOException e) {
+		
+		//if there is no return value, return "ack"
+		if(result == null) {
+		    result = "ack";
+		}
+		// write back result to client
+		try {
+            out.writeObject(result);
+        }
+        catch (IOException e) {
             // TODO Auto-generated catch block
-            //caused by out.writeObject();
-            e.printStackTrace();    //can't communicate this back to the server
-            return; //can't let it go to the finally block
-        } finally {
-            try {
-                out.close();
-                client.close();
-            }
-            catch (IOException e) {
-                // TODO handle this on server side, by printing a message
-                e.printStackTrace();  //caused by out.writeObject();        
-            }            
+            e.printStackTrace();    //handle this on server side
         }
 	}
 	
-	private void GenerateRemoteException(Exception e) {
+	private void GenerateRemoteException(Exception e, ObjectOutputStream out) {
         RemoteException rex = new RemoteException();
         rex.type = e.getClass();
         rex.message = "RemoteException";
         try {
-            new ObjectOutputStream(client.getOutputStream()).writeObject(rex);
+            out.writeObject(rex);
         } catch (IOException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
