@@ -36,6 +36,7 @@ public class RegistryService implements Runnable{
 		while(true){
 			try {
 			client = server.accept();
+			System.out.println(client);
 			inStream = new ObjectInputStream(client.getInputStream());
 			outStream = new ObjectOutputStream(client.getOutputStream());
 			RegistryMsg rrm = (RegistryMsg) inStream.readObject();

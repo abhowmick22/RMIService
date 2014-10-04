@@ -48,7 +48,10 @@ public class RemoteObjThread implements Runnable{
 	        	rex.type = e.getClass();
 	        	rex.message = "RemoteException";
 	        	try {
-					new ObjectOutputStream(client.getOutputStream()).writeObject(rex);
+					ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
+					out.writeObject(rex);
+					out.close();
+					client.close();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
