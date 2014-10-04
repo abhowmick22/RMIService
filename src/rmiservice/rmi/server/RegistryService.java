@@ -10,6 +10,13 @@ import java.net.Socket;
 // This one listens for Registry requests and handles the SimpleRegistry directly
 public class RegistryService implements Runnable{
 
+	private int port;
+	
+	public RegistryService(int registryPort) {
+		// TODO Auto-generated constructor stub
+		this.port = registryPort;
+	}
+
 	@Override
 	public void run() {
 	
@@ -20,7 +27,7 @@ public class RegistryService implements Runnable{
 		ServerSocket server = null;
 
 		try {
-			server = new ServerSocket(100);
+			server = new ServerSocket(this.port);
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

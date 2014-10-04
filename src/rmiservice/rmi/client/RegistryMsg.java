@@ -1,6 +1,8 @@
 package rmiservice.rmi.client;
 
-public class RegistryMsg
+import java.io.Serializable;
+
+public class RegistryMsg implements Serializable
 {
     public String message;
     public String serviceName;

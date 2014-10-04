@@ -8,7 +8,7 @@ package rmiservice.rmi.server;
  * describes the class reference, eg. "computePI" to reference ComputePi.class. This table
  * does the mapping.
  * Now, the reference to ComputePi that the client obtained should contain:
- *  1. The host and port of the yourRMI service
+ *  1. The dispatcherHost and dispatcherPort of the yourRMI service
  *  2. The string that describes the class that the client wants to use. So client will get
  *      a reference to the ComputePi object, and will send back the "computePI" string to
  *      yourRMI service. This is a bit redundant, but seems logical right now.
@@ -30,7 +30,7 @@ package rmiservice.rmi.server;
 (CM) for RMI: but it gives some hints about how you can make 
 it. I call it simply "yourRMI". 
 
-For example, it  shows how you can get the host name etc.,
+For example, it  shows how you can get the dispatcherHost name etc.,
 (well you can hardwire it if you like, I should say),
 or how you can make a class out of classname as a string.
 
@@ -51,8 +51,8 @@ import java.util.ArrayList;
 
 public class yourRMI
 {
-    static String host;
-    static int port;
+    static String dispatcherHost;
+    static int dispatcherPort;
     static ArrayList<String> serviceNames = new ArrayList<String>();
 
     // It will use a hash table, which contains ROR together with
@@ -60,7 +60,7 @@ public class yourRMI
     // As you can see, the exception handling is not done at all.
     public static void main(String args[])    
     {
-        //TODO: 1. registry host and registry port need not be asked from user (at least not host)
+        //TODO: 1. registry dispatcherHost and registry dispatcherPort need not be asked from user (at least not dispatcherHost)
         //      2. do error checking on the input arguments, like if(args.length<3) then...
         //String registryHost = args[0];
     	
@@ -79,15 +79,15 @@ public class yourRMI
     
 		// List of serviceNames, known at compile time for now
         
-        // The RMI dispatcher is available on famous port 12345
+        // The RMI dispatcher is available on famous dispatcherPort 12345
         
 		try {
-		host = (InetAddress.getLocalHost()).getHostName();
-        port = 12345;
-        String registryHost = host;
+		dispatcherHost = (InetAddress.getLocalHost()).getHostName();
+        dispatcherPort = 12345;
+        String registryHost = dispatcherHost;
         
         // Start a RegistryService thread - in the future this can be a process in a different JVM
-        Thread regService = new Thread(new RegistryService());
+        Thread regService = new Thread(new RegistryService(registryPort));
         regService.start();
         
         // TODO : better way to check if it is up ?
@@ -106,12 +106,14 @@ public class yourRMI
         Integer objkey = 0;
         for (String objectName : serviceNames){
         	initialclass = Class.forName(objectName + "_Impl");	// gives you ZipCodeServerImpl
-        	boolean checkInterfaceExists = false;
+        	boolean checkInterfaceExists = false; 
         	for(Class<?> inter : initialclass.getInterfaces()) {
-        	    if(inter.getName().equals("rmiservice.rmi.server.YourRemote")) {        	        
-        	        checkInterfaceExists = true;
-        	        break;
-        	    }
+            	for(Class<?> inter2 : inter.getInterfaces()) {
+    	    		if(inter2.getName().equals("rmiservice.rmi.server.YourRemote")){
+    	    			checkInterfaceExists = true;
+        	        	break;
+        	    	}
+        		}
         	}
         	if(!checkInterfaceExists) {
         	    //the service does not extent YourRemote interface, so can't instantiate 
@@ -125,7 +127,7 @@ public class yourRMI
         	tbl.addObj(o, objkey.toString());
         	objkey++;
         	
-        	RemoteObjectRef ror = new RemoteObjectRef(host, port, objkey, objectName);
+        	RemoteObjectRef ror = new RemoteObjectRef(dispatcherHost, dispatcherPort, objkey, objectName);
         	
         	RegistryMsg drm = new RegistryMsg();
         	drm.message = "bind";
@@ -156,7 +158,7 @@ public class yourRMI
 		// socket to listen for RMI requests
 		ServerSocket serverSoc = null;
 		try {
-			serverSoc = new ServerSocket(port);
+			serverSoc = new ServerSocket(dispatcherPort);
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
