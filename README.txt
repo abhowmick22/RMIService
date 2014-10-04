@@ -20,4 +20,5 @@ Communication:
 TODOs:
 1. check for null for all values returned by helper or stub in all client and server classes.
 2. All objects which implement “Remote” are passed by reference. Other objects are passed by value (serialized)
-3. make server_impl methods synchrnized
+3. make server_impl methods synchronized
+4. what about objects passed by reference by the client?
