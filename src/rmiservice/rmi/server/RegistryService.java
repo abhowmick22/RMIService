@@ -45,8 +45,10 @@ public class RegistryService implements Runnable{
 			String mesg = rrm.message;
 			
 			if (mesg.equals("Who are you?")){
+				System.out.println("read a");
 				String reply = "I am a simple registry.";
 				outStream.writeObject(reply);
+				outStream.flush();
 			}
 			
 			else if (mesg.equals("lookup")){
@@ -54,6 +56,7 @@ public class RegistryService implements Runnable{
 				// return the ROR to client
 				RemoteObjectRef ror = rs.lookup(serviceName);
 				outStream.writeObject(ror);
+				outStream.flush();
 			}
 			
 			else if (mesg.equals("bind")){
@@ -66,7 +69,9 @@ public class RegistryService implements Runnable{
 			else {
 				String reply = "Invalid Request.";
 				outStream.writeObject(reply);
+				outStream.flush();
 			}
+			
 			
 			inStream.close();
 			outStream.close();

@@ -5,7 +5,11 @@ import java.lang.reflect.InvocationTargetException;
 
 public class RemoteObjectRef implements Serializable
 {
-    String IP_adr;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	String IP_adr;
     int Port;
     int Obj_Key;
     String Remote_Interface_Name;

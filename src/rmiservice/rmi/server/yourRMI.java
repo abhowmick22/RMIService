@@ -94,10 +94,9 @@ public class yourRMI
         while(!regService.isAlive());
         
         // Get hold of in/out streams for communicating with registry
-        Socket s = new Socket(registryHost, registryPort);
-        System.out.println("dispatcher addr");
-        System.out.println(s);
-        ObjectOutputStream toRegistry = new ObjectOutputStream(s.getOutputStream());
+        
+        
+        
         //ObjectInputStream fromRegistry = new ObjectInputStream(s.getInputStream());
         
         // Instantiate objects of every serviceName, create the map RORtbl and bind these services
@@ -106,6 +105,13 @@ public class yourRMI
 
         Integer objkey = 0;
         for (String objectName : serviceNames){
+        	
+        	Socket registrySocket = new Socket(registryHost, registryPort);
+        	ObjectOutputStream toRegistry = new ObjectOutputStream(registrySocket.getOutputStream());
+        	
+        	System.out.println("dispatcher addr");
+            System.out.println(registrySocket);
+        	
         	initialclass = Class.forName(objectName + "_Impl");	// gives you ZipCodeServerImpl
         	boolean checkInterfaceExists = false; 
         	for(Class<?> inter : initialclass.getInterfaces()) {
@@ -135,11 +141,13 @@ public class yourRMI
         	drm.serviceName = objectName;
         	drm.refObject = ror;
         	toRegistry.writeObject(drm);
-        	toRegistry.flush();
+        	toRegistry.flush();	
+        	
+        	toRegistry.close();
+            registrySocket.close();
         }      
         
-        toRegistry.close();
-        s.close();
+        
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
