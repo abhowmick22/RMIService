@@ -62,11 +62,17 @@ public class yourRMI
     {
         //TODO: 1. registry host and registry port need not be asked from user (at least not host)
         //      2. do error checking on the input arguments, like if(args.length<3) then...
-        String registryHost = args[0];
-        int registryPort = Integer.parseInt(args[1]);
+        //String registryHost = args[0];
+    	
+        int registryPort = Integer.parseInt(args[0]);
+        
+        if(args.length < 2){
+        	System.out.println("Enter atleast two arguments");
+        	System.exit(0);
+        }
         
         // TODO : Take in all the service names
-        for (int i = 2; i< args.length; i++) {
+        for (int i = 1; i< args.length; i++) {
         	serviceNames.add(args[i]);
         }
         RORtbl tbl = new RORtbl();
@@ -77,8 +83,8 @@ public class yourRMI
         
 		try {
 		host = (InetAddress.getLocalHost()).getHostName();
-
         port = 12345;
+        String registryHost = host;
         
         // Start a RegistryService thread - in the future this can be a process in a different JVM
         Thread regService = new Thread(new RegistryService());
