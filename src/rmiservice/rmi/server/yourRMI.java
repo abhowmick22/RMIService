@@ -82,7 +82,7 @@ public class yourRMI
         // The RMI dispatcher is available on famous dispatcherPort 12345
         
 		try {
-		dispatcherHost = (InetAddress.getLocalHost()).getHostName();
+		dispatcherHost = (InetAddress.getLocalHost()).getHostAddress();
         dispatcherPort = 12345;
         String registryHost = dispatcherHost;
         
@@ -92,7 +92,6 @@ public class yourRMI
         
         // TODO : better way to check if it is up ?
         while(!regService.isAlive());
-
         
         // Get hold of in/out streams for communicating with registry
         Socket s = new Socket(registryHost, registryPort);
