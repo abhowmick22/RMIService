@@ -60,6 +60,8 @@ public class yourRMI
     // As you can see, the exception handling is not done at all.
     public static void main(String args[])    
     {
+        //TODO: 1. registry host and registry port need not be asked from user (at least not host)
+        //      2. do error checking on the input arguments, like if(args.length<3) then...
         String registryHost = args[0];
         int registryPort = Integer.parseInt(args[1]);
         
