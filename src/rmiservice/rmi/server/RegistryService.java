@@ -11,10 +11,19 @@ import java.net.Socket;
 public class RegistryService implements Runnable{
 
 	private int port;
+	private ServerSocket server;
+	SimpleRegistry rs;
 	
 	public RegistryService(int registryPort) {
 		// TODO Auto-generated constructor stub
 		this.port = registryPort;
+		try {
+			this.server = new ServerSocket(this.port);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		rs = new SimpleRegistry();
 	}
 
 	@Override
@@ -22,20 +31,13 @@ public class RegistryService implements Runnable{
 	
 		Socket client;
 		ObjectInputStream inStream;
-		ObjectOutputStream outStream;
-		SimpleRegistry rs = new SimpleRegistry();
-		ServerSocket server = null;
+		ObjectOutputStream outStream; 
 
-		try {
-			server = new ServerSocket(this.port);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 		
 		while(true){
 			try {
 			client = server.accept();
+			System.out.println("dispatcher as seen by registry");
 			System.out.println(client);
 			inStream = new ObjectInputStream(client.getInputStream());
 			outStream = new ObjectOutputStream(client.getOutputStream());
