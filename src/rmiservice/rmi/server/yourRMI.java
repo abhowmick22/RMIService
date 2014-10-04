@@ -63,14 +63,14 @@ public class yourRMI
         //TODO: 1. registry dispatcherHost and registry dispatcherPort need not be asked from user (at least not dispatcherHost)
         //      2. do error checking on the input arguments, like if(args.length<3) then...
         //String registryHost = args[0];
-    	
-        int registryPort = Integer.parseInt(args[0]);
         
         if(args.length < 2){
         	System.out.println("Enter atleast two arguments");
         	System.exit(0);
         }
-        
+    	
+        int registryPort = Integer.parseInt(args[0]);
+  
         // TODO : Take in all the service names
         for (int i = 1; i< args.length; i++) {
         	serviceNames.add(args[i]);
@@ -82,7 +82,7 @@ public class yourRMI
         // The RMI dispatcher is available on famous dispatcherPort 12345
         
 		try {
-		dispatcherHost = (InetAddress.getLocalHost()).getHostName();
+		dispatcherHost = (InetAddress.getLocalHost()).getHostAddress();
         dispatcherPort = 12345;
         String registryHost = dispatcherHost;
         
@@ -92,10 +92,11 @@ public class yourRMI
         
         // TODO : better way to check if it is up ?
         while(!regService.isAlive());
-
         
         // Get hold of in/out streams for communicating with registry
         Socket s = new Socket(registryHost, registryPort);
+        System.out.println("dispatcher addr");
+        System.out.println(s);
         ObjectOutputStream toRegistry = new ObjectOutputStream(s.getOutputStream());
         //ObjectInputStream fromRegistry = new ObjectInputStream(s.getInputStream());
         
