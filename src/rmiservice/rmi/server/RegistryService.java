@@ -35,6 +35,7 @@ public class RegistryService implements Runnable{
 
 		
 		while(true){
+		
 			try {
 			client = server.accept();
 
@@ -78,6 +79,8 @@ public class RegistryService implements Runnable{
 			inStream.close();
 			outStream.close();
 			//client.close();
+			
+			System.out.println(rs.registry);
 			
 			}
 			catch (IOException e) {

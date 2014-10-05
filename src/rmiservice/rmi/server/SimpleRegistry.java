@@ -6,7 +6,7 @@ import java.io.*;
 public class SimpleRegistry 
 {  
 	// the actual table storing RORs
-	ConcurrentHashMap<String, RemoteObjectRef> registry = new ConcurrentHashMap<String, 
+	public ConcurrentHashMap<String, RemoteObjectRef> registry = new ConcurrentHashMap<String, 
 																				RemoteObjectRef>();
     
     // simple constructor.

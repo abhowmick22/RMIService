@@ -73,8 +73,9 @@ public class yourRMI
   
         // TODO : Take in all the service names
         for (int i = 1; i< args.length; i++) {
-        	serviceNames.add(args[i]);
+        	serviceNames.add(args[i]);        	
         }
+        //System.out.println(serviceNames);
         
         RORtbl tbl = new RORtbl();
     
@@ -139,7 +140,8 @@ public class yourRMI
         	
         	RegistryMsg drm = new RegistryMsg();
         	drm.message = "bind";
-        	drm.serviceName = objectName;
+        	String[] parts = objectName.split("\\.");
+        	drm.serviceName = parts[parts.length-1];
         	drm.refObject = ror;
         	toRegistry.writeObject(drm);
         	toRegistry.flush();
@@ -152,6 +154,7 @@ public class yourRMI
         	//registrySocket.close();
         	
         }      
+     
         //Thread.sleep(1000);
         
         
