@@ -9,6 +9,9 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import rmiservice.rmi.comm.RegistryMsg;
+import rmiservice.rmi.comm.RemoteObjectRef;
+
 public class SimpleRegistry
 {
     private String regHost;

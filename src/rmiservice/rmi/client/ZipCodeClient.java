@@ -14,6 +14,8 @@ package rmiservice.rmi.client;
 
 import java.io.*;
 
+import rmiservice.rmi.comm.RemoteObjectRef;
+
 public class ZipCodeClient { 
 
     // the main takes three arguments:

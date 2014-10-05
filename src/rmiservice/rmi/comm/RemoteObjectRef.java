@@ -1,18 +1,13 @@
-package rmiservice.rmi.server;
+package rmiservice.rmi.comm;
 
-import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 
-public class RemoteObjectRef implements Serializable
+public class RemoteObjectRef
 {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	String IP_adr;
-    int Port;
-    int Obj_Key;
-    String Remote_Interface_Name;
+    public String IP_adr;
+    public int Port;
+    public int Obj_Key;
+    public String Remote_Interface_Name;
 
     public RemoteObjectRef(String ip, int port, int obj_key, String riname) 
     {
@@ -26,9 +21,9 @@ public class RemoteObjectRef implements Serializable
      * Creates the stub for the remote object that contains the logic for the task.
      * @return The stub of the remote object.
      */
-    Object localise()
+    public Object localise()
     {
-        String className = this.Remote_Interface_Name + "_stub";
+        String className = "rmiservice.rmi.client." + this.Remote_Interface_Name + "_stub"; //TODO: any other way?
         Class<?> c;
         try {
             c = Class.forName(className);

@@ -2,6 +2,8 @@ package rmiservice.rmi.server;
 
 import java.io.*;
 
+import rmiservice.rmi.comm.RemoteObjectRef;
+
 //we test simple registry by binding a service to ROR.
 
 public class testRebind

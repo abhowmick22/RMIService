@@ -2,6 +2,8 @@ package rmiservice.rmi.client;
 
 import java.io.*;
 
+import rmiservice.rmi.comm.RemoteObjectRef;
+
 //we test simple registry by looking up a service.
 
 public class testLookup

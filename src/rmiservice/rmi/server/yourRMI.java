@@ -49,6 +49,10 @@ import java.io.ObjectOutputStream;
 import java.net.*;
 import java.util.ArrayList;
 
+import rmiservice.rmi.comm.ClientRmiMsg;
+import rmiservice.rmi.comm.RegistryMsg;
+import rmiservice.rmi.comm.RemoteObjectRef;
+
 public class yourRMI
 {
     static String dispatcherHost;

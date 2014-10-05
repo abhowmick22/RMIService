@@ -7,6 +7,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
+import rmiservice.rmi.comm.ClientRmiMsg;
+
 public class ZipCodeServer_stub implements ZipCodeServer
 {
     private ClientRmiMsg obj;

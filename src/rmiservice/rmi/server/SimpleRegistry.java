@@ -3,6 +3,8 @@ package rmiservice.rmi.server;
 import java.util.concurrent.ConcurrentHashMap;
 import java.io.*;
 
+import rmiservice.rmi.comm.RemoteObjectRef;
+
 public class SimpleRegistry 
 {  
 	// the actual table storing RORs

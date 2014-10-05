@@ -5,6 +5,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import rmiservice.rmi.comm.RegistryMsg;
+import rmiservice.rmi.comm.RemoteObjectRef;
 
 
 // This one listens for Registry requests and handles the SimpleRegistry directly

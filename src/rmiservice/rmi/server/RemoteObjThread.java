@@ -1,6 +1,7 @@
 package rmiservice.rmi.server;
 
 import java.net.Socket;
+import rmiservice.rmi.comm.ClientRmiMsg;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.InvocationTargetException;

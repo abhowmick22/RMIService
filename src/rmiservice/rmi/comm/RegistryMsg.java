@@ -1,4 +1,4 @@
-package rmiservice.rmi.client;
+package rmiservice.rmi.comm;
 
 import java.io.Serializable;
 
