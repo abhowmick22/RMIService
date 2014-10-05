@@ -40,10 +40,16 @@ public class RemoteObjThread implements Runnable{
         
         //execute method, and get return value if there is one
 		try {
+			System.out.println(this.message.methodName);
+			System.out.println(params[0].getCanonicalName());
+			
 			Method method = object.getClass().getMethod(this.message.methodName, params);
+			System.out.println("method obtained");
 			if(method.getReturnType().equals(Void.TYPE)) {
+				System.out.println("void returned");
 			    method.invoke(this.object, this.message.args);
 			} else {
+				System.out.println("type returned");
 			    result = method.invoke(this.object, this.message.args);
 			}
 		} catch (SecurityException e) {   //could have combined all these into one, but can't compile that on GHC machines
@@ -69,7 +75,9 @@ public class RemoteObjThread implements Runnable{
 		}
 		// write back result to client
 		try {
+			System.out.println("trying to send res");
             out.writeObject(result);
+            
         }
         catch (IOException e) {
             // TODO Auto-generated catch block

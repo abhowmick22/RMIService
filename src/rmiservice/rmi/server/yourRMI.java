@@ -88,7 +88,9 @@ public class yourRMI
         // The RMI dispatcher is available on famous dispatcherPort 12345
         
 		try {
-		dispatcherHost = (InetAddress.getLocalHost()).getHostAddress();
+		//byte[] addr = {(byte) 128,(byte) 237,(byte) 220,(byte) 215};
+		//dispatcherHost = InetAddress.getByAddress(addr).getCanonicalHostName();
+		dispatcherHost = "128.237.220.215";
         dispatcherPort = 12345;
         String registryHost = dispatcherHost;
         
@@ -213,10 +215,14 @@ public class yourRMI
 			
 				try {
 				client = serverSoc.accept();
-				
+				System.out.println(client);
 	        	ClientRmiMsg msg;
 				msg = (ClientRmiMsg) new ObjectInputStream(client.getInputStream()).readObject();
+				System.out.println("msg is");
+				System.out.println(msg);
 				Object obj = tbl.findObj(msg.obj_key);
+				System.out.println("methodname read in yourRMI");
+				System.out.println(msg.methodName);
 	        	new Thread(new RemoteObjThread(obj, msg, client), (tid++).toString()).start();
 	        	
 	        	// dispatcher's work is done hopefully
