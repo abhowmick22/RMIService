@@ -1,8 +1,9 @@
 package rmiservice.rmi.comm;
 
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 
-public class RemoteObjectRef
+public class RemoteObjectRef implements Serializable
 {
     public String IP_adr;
     public int Port;
