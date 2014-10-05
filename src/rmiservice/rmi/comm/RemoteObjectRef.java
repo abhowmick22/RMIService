@@ -36,7 +36,7 @@ public class RemoteObjectRef implements Serializable
         
         Object o;
         try {
-            o = c.getConstructor(String.class, Integer.class).newInstance(this.IP_adr, this.Port, this.Obj_Key);
+            o = c.getConstructor(String.class, int.class, int.class).newInstance(this.IP_adr, this.Port, this.Obj_Key);
         }
         catch (InstantiationException e) {
             System.out.println("Could not instantiate class: "+ className);

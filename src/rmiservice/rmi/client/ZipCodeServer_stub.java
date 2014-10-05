@@ -20,7 +20,8 @@ public class ZipCodeServer_stub implements ZipCodeServer
         this.serverPort = serverPort;        
         this.obj = new ClientRmiMsg();
         this.obj.obj_key = obj_key;        
-        this.obj.args = new ArrayList<Object>();                
+        this.obj.args = new ArrayList<Object>();
+        this.obj.argParams = new ArrayList<Class<?>>();
     }
     
     @Override
