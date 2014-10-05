@@ -75,6 +75,7 @@ public class yourRMI
         for (int i = 1; i< args.length; i++) {
         	serviceNames.add(args[i]);
         }
+        
         RORtbl tbl = new RORtbl();
     
 		// List of serviceNames, known at compile time for now
@@ -110,9 +111,7 @@ public class yourRMI
         	Socket registrySocket = new Socket(registryHost, registryPort);
         	registrySocket.setTcpNoDelay(true);
         	ObjectOutputStream toRegistry = new ObjectOutputStream(registrySocket.getOutputStream());
-        	
-        	System.out.println("dispatcher addr");
-            System.out.println(registrySocket);
+        	ObjectInputStream fromRegistry = new ObjectInputStream(registrySocket.getInputStream());
         	
         	initialclass = Class.forName(objectName + "_Impl");	// gives you ZipCodeServerImpl
         	boolean checkInterfaceExists = false; 
@@ -143,11 +142,13 @@ public class yourRMI
         	drm.serviceName = objectName;
         	drm.refObject = ror;
         	toRegistry.writeObject(drm);
-        	toRegistry.flush();	
+        	toRegistry.flush();
         
         	//Thread.sleep(1000);
-        	toRegistry.close();
-        	//registrySocket.shutdownOutput();
+        	//toRegistry.close();
+        	registrySocket.shutdownOutput();
+        	fromRegistry.readObject();
+        	registrySocket.shutdownInput();
         	//registrySocket.close();
         	
         }      

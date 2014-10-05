@@ -37,15 +37,14 @@ public class RegistryService implements Runnable{
 		while(true){
 			try {
 			client = server.accept();
-			System.out.println("dispatcher as seen by registry");
-			System.out.println(client);
+
 			inStream = new ObjectInputStream(client.getInputStream());
 			outStream = new ObjectOutputStream(client.getOutputStream());
 			RegistryMsg rrm = (RegistryMsg) inStream.readObject();
 			String mesg = rrm.message;
 			
 			if (mesg.equals("Who are you?")){
-				System.out.println("read a");
+
 				String reply = "I am a simple registry.";
 				outStream.writeObject(reply);
 				outStream.flush();
@@ -61,10 +60,11 @@ public class RegistryService implements Runnable{
 			
 			else if (mesg.equals("bind")){
 				// bing ROR to service name
-				System.out.println("fdsfs");
+				//System.out.println("fdsfs");
 				String serviceName = rrm.serviceName;
 				RemoteObjectRef ror = rrm.refObject;
 				rs.bind(serviceName, ror);
+				outStream.writeObject("ACK");
 			}
 			
 			else {
@@ -74,9 +74,10 @@ public class RegistryService implements Runnable{
 			}
 			
 			
+			
 			inStream.close();
 			outStream.close();
-			client.close();
+			//client.close();
 			
 			}
 			catch (IOException e) {
