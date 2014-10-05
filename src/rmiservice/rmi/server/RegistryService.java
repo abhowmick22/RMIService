@@ -45,6 +45,7 @@ public class RegistryService implements Runnable{
 			outStream = new ObjectOutputStream(client.getOutputStream());
 			RegistryMsg rrm = (RegistryMsg) inStream.readObject();
 			String mesg = rrm.message;
+			System.out.println(mesg);
 			
 			if (mesg.equals("Who are you?")){
 

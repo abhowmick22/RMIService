@@ -139,13 +139,14 @@ public class yourRMI
         	o = initialclass.newInstance();
         	tbl.addObj(o, objkey.toString());
         	objkey++;
-        	
-        	RemoteObjectRef ror = new RemoteObjectRef(dispatcherHost, dispatcherPort, objkey, objectName);
+        	String[] parts = objectName.split("\\.");
+        	String name = parts[parts.length-1];
+        	RemoteObjectRef ror = new RemoteObjectRef(dispatcherHost, dispatcherPort, objkey, name);
         	
         	RegistryMsg drm = new RegistryMsg();
         	drm.message = "bind";
-        	String[] parts = objectName.split("\\.");
-        	drm.serviceName = parts[parts.length-1];
+        	
+        	drm.serviceName = name;
         	drm.refObject = ror;
         	toRegistry.writeObject(drm);
         	toRegistry.flush();
