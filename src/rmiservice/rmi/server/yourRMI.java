@@ -51,6 +51,7 @@ import java.util.ArrayList;
 
 import rmiservice.rmi.comm.ClientRmiMsg;
 import rmiservice.rmi.comm.RegistryMsg;
+import rmiservice.rmi.comm.RemoteException;
 import rmiservice.rmi.comm.RemoteObjectRef;
 
 public class yourRMI
@@ -139,8 +140,12 @@ public class yourRMI
         	}
         	
         	o = initialclass.newInstance();
-        	tbl.addObj(o, objkey.toString());
         	objkey++;
+        	tbl.addObj(objkey, o);
+        	System.out.println("object table");
+        	System.out.println(tbl);
+        	
+        	
         	String[] parts = objectName.split("\\.");
         	String name = parts[parts.length-1];
         	RemoteObjectRef ror = new RemoteObjectRef(dispatcherHost, dispatcherPort, objkey, name);
@@ -162,6 +167,7 @@ public class yourRMI
         	
         }      
      
+        
         //Thread.sleep(1000);
         
         
@@ -219,10 +225,10 @@ public class yourRMI
 	        	ClientRmiMsg msg;
 				msg = (ClientRmiMsg) new ObjectInputStream(client.getInputStream()).readObject();
 				System.out.println("msg is");
-				System.out.println(msg);
+				//System.out.println(msg);
 				Object obj = tbl.findObj(msg.obj_key);
-				System.out.println("methodname read in yourRMI");
-				System.out.println(msg.methodName);
+				System.out.println(obj == null);
+				System.out.println(obj.getClass().getName());
 	        	new Thread(new RemoteObjThread(obj, msg, client), (tid++).toString()).start();
 	        	
 	        	// dispatcher's work is done hopefully
