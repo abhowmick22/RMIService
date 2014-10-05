@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import rmiservice.rmi.comm.ClientRmiMsg;
 import rmiservice.rmi.comm.ZipCodeList;
 import rmiservice.rmi.comm.ZipCodeServer;
+import rmiservice.rmi.comm.RemoteException;
 
 public class ZipCodeServer_stub implements ZipCodeServer
 {
@@ -31,7 +32,7 @@ public class ZipCodeServer_stub implements ZipCodeServer
     {
         System.out.println(serverIP);
         System.out.println(serverPort);
-        this.obj.methodName = "initialise";
+        this.obj.methodName = "rmiservice.rmi.comm.ZipCodeServer_Impl.initialise";
         this.obj.args.clear();
         this.obj.args.add(newList);
         this.obj.argParams.clear();
