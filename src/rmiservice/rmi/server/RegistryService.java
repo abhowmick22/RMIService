@@ -61,6 +61,7 @@ public class RegistryService implements Runnable{
 			
 			else if (mesg.equals("bind")){
 				// bing ROR to service name
+				System.out.println("fdsfs");
 				String serviceName = rrm.serviceName;
 				RemoteObjectRef ror = rrm.refObject;
 				rs.bind(serviceName, ror);

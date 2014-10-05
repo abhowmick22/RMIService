@@ -95,18 +95,20 @@ public class yourRMI
         
         // Get hold of in/out streams for communicating with registry
         
-        
-        
         //ObjectInputStream fromRegistry = new ObjectInputStream(s.getInputStream());
         
         // Instantiate objects of every serviceName, create the map RORtbl and bind these services
         Class<?> initialclass;
         Object o;
+        
+        
+    	
 
         Integer objkey = 0;
         for (String objectName : serviceNames){
-        	
+
         	Socket registrySocket = new Socket(registryHost, registryPort);
+        	registrySocket.setTcpNoDelay(true);
         	ObjectOutputStream toRegistry = new ObjectOutputStream(registrySocket.getOutputStream());
         	
         	System.out.println("dispatcher addr");
@@ -142,10 +144,18 @@ public class yourRMI
         	drm.refObject = ror;
         	toRegistry.writeObject(drm);
         	toRegistry.flush();	
-        	
+        
+        	//Thread.sleep(1000);
         	toRegistry.close();
-            registrySocket.close();
+        	//registrySocket.shutdownOutput();
+        	//registrySocket.close();
+        	
         }      
+        //Thread.sleep(1000);
+        
+        
+    	//System.out.println("socket closed by dispathcer");
+        
         
         
 		} catch (Exception e) {
