@@ -8,6 +8,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import rmiservice.rmi.comm.ClientRmiMsg;
+import rmiservice.rmi.comm.ZipCodeList;
+import rmiservice.rmi.comm.ZipCodeServer;
 
 public class ZipCodeServer_stub implements ZipCodeServer
 {
@@ -27,11 +29,14 @@ public class ZipCodeServer_stub implements ZipCodeServer
     @Override
     public void initialise(ZipCodeList newList)
     {
+        System.out.println(serverIP);
+        System.out.println(serverPort);
         this.obj.methodName = "initialise";
         this.obj.args.clear();
         this.obj.args.add(newList);
         this.obj.argParams.clear();
         this.obj.argParams.add(ZipCodeList.class);
+        System.out.println("reached here");
         Object retValue = marshall();
         if(retValue == null) {
             //exception on client side, already dealt with in marshall method   
@@ -120,12 +125,15 @@ public class ZipCodeServer_stub implements ZipCodeServer
         
         Socket clientSocket = null;
         Object retValue = null;
+        System.out.println("reached marshall");
         try {
             clientSocket = new Socket(this.serverIP, this.serverPort);
-            ObjectOutputStream outStream = new ObjectOutputStream(clientSocket.getOutputStream());
-            ObjectInputStream inStream = new ObjectInputStream(clientSocket.getInputStream());
-            outStream.writeObject(this.obj);
+            System.out.println("socket created");
+            ObjectOutputStream outStream = new ObjectOutputStream(clientSocket.getOutputStream());            
+            outStream.writeObject(this.obj);            
             outStream.flush();  //can't close outStream yet because it screws up the connection
+            ObjectInputStream inStream = new ObjectInputStream(clientSocket.getInputStream());
+            System.out.println("in stream created");                        
             retValue = (Object) inStream.readObject();                        
             inStream.close();
             outStream.close();

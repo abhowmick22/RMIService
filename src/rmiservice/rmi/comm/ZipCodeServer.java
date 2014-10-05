@@ -1,4 +1,6 @@
-package rmiservice.rmi.server;
+package rmiservice.rmi.comm;
+
+import rmiservice.rmi.server.YourRemote;
 
 public interface ZipCodeServer extends YourRemote// extends YourRemote or whatever
 {
