@@ -35,14 +35,12 @@ public class SimpleRegistry
             RegistryMsg crm = new RegistryMsg();
             crm.message = "lookup";
             crm.serviceName = serviceName;
-            System.out.println(serviceName);
             outStream.writeObject(crm);
             outStream.flush();  //can't close outStream yet because it screws up the connection
             retValue = (RemoteObjectRef) inStream.readObject();                        
             inStream.close();
             outStream.close();
             clientSocket.close(); 
-            System.out.println("retValue="+retValue.IP_adr);
             return retValue;
         }
         catch (UnknownHostException e) {

@@ -82,8 +82,7 @@ public class yourRMI
             	boolean checkInterfaceExists = false; 
             	for(Class<?> inter : initialclass.getInterfaces()) {
                 	for(Class<?> inter2 : inter.getInterfaces()) {
-                	    System.out.println(inter2.getName());
-        	    		if(inter2.getName().equals("rmiservice.rmi.comm.YourRemote")){
+                	    if(inter2.getName().equals("rmiservice.rmi.comm.YourRemote")){
         	    			checkInterfaceExists = true;
             	        	break;
             	    	}
