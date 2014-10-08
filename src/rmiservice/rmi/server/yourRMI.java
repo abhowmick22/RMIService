@@ -53,7 +53,7 @@ public class yourRMI
         int dispatcherPort = Integer.parseInt(args[1]);
         int registryPort = Integer.parseInt(args[2]);
         ArrayList<String> serviceNames = new ArrayList<String>();
-        for (int i = 1; i< args.length; i++) {
+        for (int i = 3; i< args.length; i++) {
         	serviceNames.add(args[i]);        	
         }
         
