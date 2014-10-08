@@ -42,26 +42,11 @@ public class RemoteObjThread implements Runnable{
         
         //execute method, and get return value if there is one
 		try {
-//		    for(Class<?> par : params) {
-//		        System.out.print(par.getName()+", ");
-//		    }
-//		    System.out.println();for(Object ar : this.message.args) {
-//                System.out.print(ar.toString()+", ");
-//            }
-//            System.out.println();
-//            for(Method me : object.getClass().getMethods()) {
-//                System.out.print(me.getName()+": ");
-//                for(Class<?> para : me.getParameterTypes())
-//                    System.out.print(para.getName()+", ");
-//                System.out.println();                
-//            }
 		    Method method = object.getClass().getMethod(this.message.methodName, params);
-		    System.out.println("FOUND METHOD: "+method.getName());
-			if(method.getReturnType().equals(Void.TYPE)) {
-			    System.out.println(this.object.getClass());
+		    if(method.getReturnType().equals(Void.TYPE)) {
 			    method.invoke(this.object, args);
 			} else {
-			    result = method.invoke(this.object, this.message.args);
+			    result = method.invoke(this.object, args);
 			}
 		} catch (SecurityException e) {   //could have combined all these into one, but can't compile that on GHC machines
             GenerateRemoteException(e, out);   
