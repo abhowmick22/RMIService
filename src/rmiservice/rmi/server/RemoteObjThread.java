@@ -16,7 +16,6 @@ public class RemoteObjThread implements Runnable{
 	public Socket client;
 	
 	public RemoteObjThread(Object obj, ClientRmiMsg msg, Socket client) {
-		// TODO Auto-generated constructor stub
 		this.object = obj;
 		this.message = msg;
 		this.client = client;
@@ -33,14 +32,16 @@ public class RemoteObjThread implements Runnable{
         try {
             out = new ObjectOutputStream(this.client.getOutputStream());
         }
-        catch (IOException e1) {
-            // TODO handle this, print message on server side
-            e1.printStackTrace();   //can't communicate this back to the client. also can't process forward.
+        catch (IOException e) {
+            System.out.println("Following exception encountered while communicating with client:");
+            e.printStackTrace();   //can't communicate this back to the client. also can't proceed forward.
             return;
         }        
         
         //execute method, and get return value if there is one
 		try {
+		    System.out.println(this.message.args.toArray().toString());
+		    System.out.println(this.message.argParams.toArray().toString());
 		    Method method = object.getClass().getMethod(this.message.methodName, params);
 			if(method.getReturnType().equals(Void.TYPE)) {
 			    method.invoke(this.object, this.message.args);
@@ -55,6 +56,7 @@ public class RemoteObjThread implements Runnable{
             return;
         } catch (IllegalArgumentException e) {
             GenerateRemoteException(e, out);
+            e.printStackTrace();
             return;
         } catch (IllegalAccessException e) {
             GenerateRemoteException(e, out);
