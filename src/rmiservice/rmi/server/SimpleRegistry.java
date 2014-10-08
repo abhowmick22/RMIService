@@ -16,6 +16,8 @@ public class SimpleRegistry
     // returns the ROR (if found) or null (if else)
     public RemoteObjectRef lookup(String serviceName)     
     { 
+        System.out.println("service name for lookup: "+serviceName);
+        System.out.println("service name in registry: "+registry.keySet().iterator().next());
         if(!registry.contains(serviceName))
             return null;
         return registry.get(serviceName);         
