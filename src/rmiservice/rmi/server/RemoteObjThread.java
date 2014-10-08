@@ -1,6 +1,7 @@
 package rmiservice.rmi.server;
 
 import java.net.Socket;
+
 import rmiservice.rmi.comm.ClientRmiMsg;
 import rmiservice.rmi.comm.RemoteException;
 
@@ -40,8 +41,16 @@ public class RemoteObjThread implements Runnable{
         
         //execute method, and get return value if there is one
 		try {
-		    System.out.println(this.message.args.toArray().toString());
-		    System.out.println(this.message.argParams.toArray().toString());
+		    for(Class<?> par : params) {
+		        System.out.print(par.getName()+", ");
+		    }
+		    System.out.println();for(Object ar : this.message.args) {
+                System.out.print(ar.toString()+", ");
+            }
+            System.out.println();
+            for(Method me : object.getClass().getMethods()) {
+                System.out.println(me.getName());
+            }
 		    Method method = object.getClass().getMethod(this.message.methodName, params);
 			if(method.getReturnType().equals(Void.TYPE)) {
 			    method.invoke(this.object, this.message.args);
