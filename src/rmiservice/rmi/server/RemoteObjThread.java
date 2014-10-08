@@ -49,7 +49,10 @@ public class RemoteObjThread implements Runnable{
             }
             System.out.println();
             for(Method me : object.getClass().getMethods()) {
-                System.out.println(me.getName());
+                System.out.print(me.getName()+": ");
+                for(Class<?> para : me.getParameterTypes())
+                    System.out.print(para.getName()+", ");
+                System.out.println();                
             }
 		    Method method = object.getClass().getMethod(this.message.methodName, params);
 			if(method.getReturnType().equals(Void.TYPE)) {
