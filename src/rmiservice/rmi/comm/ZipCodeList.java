@@ -12,8 +12,8 @@ public class ZipCodeList implements Serializable
 
     public ZipCodeList(String c, String z, ZipCodeList n)
     {
-        city=c;
-        ZipCode=z;
-        next=n;
+        this.city=c;
+        this.ZipCode=z;
+        this.next=n;
     }
 }

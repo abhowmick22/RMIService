@@ -119,7 +119,7 @@ public class ZipCodeClient {
          } catch(RemoteException e) {
              System.out.println("Server side exception:");
              System.out.println("Message from server: " + e.getLocalizedMessage());
-             System.out.println("Exception class: " + e.getType());
+             System.out.println("Exception class: " + e.getType());             
          }
      }
 }

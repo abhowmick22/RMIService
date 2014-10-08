@@ -41,29 +41,10 @@ public class RemoteObjThread implements Runnable{
         
         //execute method, and get return value if there is one
 		try {
-			//System.out.println(this.message.methodName);
-			//System.out.println(params[0].getCanonicalName());
-			
-		
-			//System.out.println(object.getClass().getMethods());
-			/*
-			for (Method m : object.getClass().getMethods()){
-				System.out.println("svc");
-				System.out.println(m.getName());
-				System.out.println(m.getParameterTypes()[0].getName());
-			}
-			*/
-			
-	
-			Method method = object.getClass().getMethod(this.message.methodName, params);
-			
-
-			System.out.println("method obtained");
+		    Method method = object.getClass().getMethod(this.message.methodName, params);
 			if(method.getReturnType().equals(Void.TYPE)) {
-				System.out.println("void returned");
 			    method.invoke(this.object, this.message.args);
 			} else {
-				System.out.println("type returned");
 			    result = method.invoke(this.object, this.message.args);
 			}
 		} catch (SecurityException e) {   //could have combined all these into one, but can't compile that on GHC machines
@@ -85,18 +66,18 @@ public class RemoteObjThread implements Runnable{
 		
 		//if there is no return value, return "ack"
 		if(result == null) {
-		    result = "ack";
+		    result = "ACK";
 		}
-		// write back result to client
+		// write back result to client, could be null
 		try {
-			System.out.println("trying to send res");
-            out.writeObject(result);
-            
+			out.writeObject(result);
+			out.flush();
+			client.shutdownOutput();
         }
         catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();    //handle this on server side
-        }
+            System.out.println("Could not communicate the result/ACK back to the client due to IOException. The stacktrace is:");
+            e.printStackTrace();
+        }		
 	}
 	
 	private void GenerateRemoteException(Exception e, ObjectOutputStream out) {
@@ -104,8 +85,8 @@ public class RemoteObjThread implements Runnable{
         try {
             out.writeObject(rex);
         } catch (IOException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+            System.out.println("Could not communicate the RemoteException back to the client due to IOException. The stacktrace is:");
+            e.printStackTrace();
         }
 
 	}

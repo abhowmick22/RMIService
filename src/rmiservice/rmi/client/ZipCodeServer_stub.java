@@ -129,6 +129,7 @@ public class ZipCodeServer_stub implements ZipCodeServer
             retValue = (Object) inStream.readObject();                        
             inStream.close();
             outStream.close();
+            //client can close the socket. 
             clientSocket.close();            
         }
         catch (UnknownHostException e) {

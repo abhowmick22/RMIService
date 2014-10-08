@@ -12,23 +12,25 @@ import rmiservice.rmi.comm.RemoteObjectRef;
 public class RegistryService implements Runnable{
 
 	private int port;
-	private ServerSocket server;
-	SimpleRegistry rs;
+	public SimpleRegistry rs;
 	
-	public RegistryService(int registryPort) {
-		this.port = registryPort;
-		try {
-			this.server = new ServerSocket(this.port);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+	public RegistryService(int registryPort) throws IOException {
+		this.port = registryPort;				
 		this.rs = new SimpleRegistry();
 	}
 
 	@Override
 	public void run() {
 	
+	    ServerSocket server = null;
+        try {
+            server = new ServerSocket(this.port);
+        }
+        catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+            return;
+        }
 		Socket client;
 		ObjectInputStream inStream;
 		ObjectOutputStream outStream; 		
@@ -77,12 +79,14 @@ public class RegistryService implements Runnable{
     			client.shutdownOutput();
     			
     		} catch (IOException e) {
-    			// TODO Auto-generated catch block
+    			System.out.println("Following IO Exception occured in the Registry Service:");
     			e.printStackTrace();
     		} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-    		}    			
+                System.out.println("Registry Message class not found.");
+                e.printStackTrace();
+                System.out.println("No communication possible without this class. System will exit.");
+                System.exit(0);
+            }    			
 		}
 		
 	}

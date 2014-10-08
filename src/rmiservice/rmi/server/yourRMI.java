@@ -41,137 +41,89 @@ import rmiservice.rmi.comm.RemoteObjectRef;
 
 public class yourRMI
 {
-    static String dispatcherHost;
-    static int dispatcherPort;
-    static ArrayList<String> serviceNames = new ArrayList<String>();
-
-    // It will use a hash table, which contains ROR together with
-    // reference to the remote object.
-    // As you can see, the exception handling is not done at all.
+    
     public static void main(String args[])    
     {
-        //TODO: 1. registry dispatcherHost and registry dispatcherPort need not be asked from user (at least not dispatcherHost)
-        //      2. do error checking on the input arguments, like if(args.length<3) then...
-        //String registryHost = args[0];
-        
-        if(args.length < 2){
-        	System.out.println("Enter atleast two arguments");
+        if(args.length < 4){
+        	System.out.println("Enter atleast three arguments: <LocalMachineName> <DispatcherPort> <RegistryPort> <ServiceName(s)>");
         	System.exit(0);
         }
-    	
-        int registryPort = Integer.parseInt(args[0]);
-  
-        // TODO : Take in all the service names
+        String dispatcherHost = args[0];
+        String registryHost = dispatcherHost;
+        int dispatcherPort = Integer.parseInt(args[1]);
+        int registryPort = Integer.parseInt(args[2]);
+        ArrayList<String> serviceNames = new ArrayList<String>();
         for (int i = 1; i< args.length; i++) {
         	serviceNames.add(args[i]);        	
         }
-        //System.out.println(serviceNames);
         
+        //table that maps a service (associated with a remote object) with the local object
         RORtbl tbl = new RORtbl();
+        
+        try {		
+            // Start a RegistryService thread - in the future this can be a process in a different JVM
+            RegistryService regService = new RegistryService(registryPort);
+            Thread regServiceThread = new Thread(regService);
+            regServiceThread.start();        
+            // TODO : better way to check if it is up ?
+            //wait till the registry is up and running
+            while(!regServiceThread.isAlive());
+        
+            // Instantiate objects of every serviceName, create the map RORtbl and bind these services
+            int objkey = 0;
+            for (String objectName : serviceNames){
     
-		// List of serviceNames, known at compile time for now
-        
-        // The RMI dispatcher is available on famous dispatcherPort 12345
-        
-		try {
-		//byte[] addr = {(byte) 128,(byte) 237,(byte) 220,(byte) 215};
-		//dispatcherHost = InetAddress.getByAddress(addr).getCanonicalHostName();
-		dispatcherHost = "128.237.220.215";
-        dispatcherPort = 12345;
-        String registryHost = dispatcherHost;
-        
-        // Start a RegistryService thread - in the future this can be a process in a different JVM
-        Thread regService = new Thread(new RegistryService(registryPort));
-        regService.start();
-        
-        // TODO : better way to check if it is up ?
-        while(!regService.isAlive());
-        
-        // Get hold of in/out streams for communicating with registry
-        
-        //ObjectInputStream fromRegistry = new ObjectInputStream(s.getInputStream());
-        
-        // Instantiate objects of every serviceName, create the map RORtbl and bind these services
-        Class<?> initialclass;
-        Object o;
-        
-        
-    	
-
-        Integer objkey = 0;
-        for (String objectName : serviceNames){
-
-        	Socket registrySocket = new Socket(registryHost, registryPort);
-        	registrySocket.setTcpNoDelay(true);
-        	ObjectOutputStream toRegistry = new ObjectOutputStream(registrySocket.getOutputStream());
-        	ObjectInputStream fromRegistry = new ObjectInputStream(registrySocket.getInputStream());
-        	
-        	initialclass = Class.forName(objectName + "_Impl");	// gives you ZipCodeServerImpl
-        	boolean checkInterfaceExists = false; 
-        	for(Class<?> inter : initialclass.getInterfaces()) {
-            	for(Class<?> inter2 : inter.getInterfaces()) {
-    	    		if(inter2.getName().equals("rmiservice.rmi.server.YourRemote")){
-    	    			checkInterfaceExists = true;
-        	        	break;
-        	    	}
-        		}
-        	}
-        	if(!checkInterfaceExists) {
-        	    //the service does not extent YourRemote interface, so can't instantiate 
-        	    //it and add to registry
-        	    System.out.println(objectName + " does not extend YourRemote interface and "
-        	            + "hence cannot be instantiated and bound to registry.");
-        	    continue;
-        	}
-        	
-        	o = initialclass.newInstance();
-        	objkey++;
-        	tbl.addObj(objkey, o);
-        	System.out.println("object table");
-        	System.out.println(tbl);
-        	
-        	
-        	String[] parts = objectName.split("\\.");
-        	String name = parts[parts.length-1];
-        	RemoteObjectRef ror = new RemoteObjectRef(dispatcherHost, dispatcherPort, objkey, name);
-        	
-        	RegistryMsg drm = new RegistryMsg();
-        	drm.message = "bind";
-        	
-        	drm.serviceName = name;
-        	drm.refObject = ror;
-        	toRegistry.writeObject(drm);
-        	toRegistry.flush();
-        
-        	registrySocket.shutdownOutput();
-        	fromRegistry.readObject(); //TODO: ack?
-        	registrySocket.shutdownInput();
-        	//registrySocket.close();  TODO: why not this?
-        	
-        	
-        }      
-     
-        
-        //Thread.sleep(1000);
-        
-        
-    	//System.out.println("socket closed by dispathcer");
-        
-        
-        
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
+            	Socket registrySocket = new Socket(registryHost, registryPort);
+            	registrySocket.setTcpNoDelay(true);
+            	ObjectOutputStream toRegistry = new ObjectOutputStream(registrySocket.getOutputStream());
+            	ObjectInputStream fromRegistry = new ObjectInputStream(registrySocket.getInputStream());
+            	
+            	Class<?> initialclass = Class.forName(objectName + "_Impl");	// gives you ZipCodeServer_Impl for example
+            	boolean checkInterfaceExists = false; 
+            	for(Class<?> inter : initialclass.getInterfaces()) {
+                	for(Class<?> inter2 : inter.getInterfaces()) {
+        	    		if(inter2.getName().equals("rmiservice.rmi.comm.YourRemote")){
+        	    			checkInterfaceExists = true;
+            	        	break;
+            	    	}
+            		}
+            	}
+            	if(!checkInterfaceExists) {
+            	    //the service does not extent YourRemote interface, so can't instantiate 
+            	    //it and add to registry
+            	    System.out.println(objectName + " does not extend YourRemote interface and "
+            	            + "hence cannot be instantiated and bound to registry.");
+            	    continue;
+            	}
+            	
+            	Object obj = initialclass.newInstance();
+            	objkey++;
+            	tbl.addObj(objkey, obj);
+            	System.out.println("object table");
+            	System.out.println(tbl);
+            	            	
+            	String[] parts = objectName.split("\\.");
+            	String name = parts[parts.length-1];
+            	RemoteObjectRef ror = new RemoteObjectRef(dispatcherHost, dispatcherPort, objkey, name);
+            	
+            	RegistryMsg drm = new RegistryMsg();
+            	drm.message = "bind";
+            	
+            	drm.serviceName = name;
+            	drm.refObject = ror;
+            	toRegistry.writeObject(drm);
+            	toRegistry.flush();
+            
+            	registrySocket.shutdownOutput();
+            	fromRegistry.readObject();     //ACK
+            	registrySocket.shutdownInput();
+            	//registrySocket.close();  //TODO: why not do this?         	        
+            }      
+     	} catch (Exception e) {
+			System.out.println("An exception occured while binding services to the registry:");
 			e.printStackTrace();
 		} 
  
-
-        
-        // Now we go into a loop.
-        // Look at rmiregistry.java for a simple server programming.
-        // The code is far from optimal but in any way you can get basics.
-        // Actually you should use multiple threads, or this easily
-        // deadlocks. But for your implementation I do not ask it.
-        // For design, consider well.
 		Integer tid = 0;
 		Socket client = null;
 		
@@ -179,9 +131,10 @@ public class yourRMI
 		ServerSocket serverSoc = null;
 		try {
 			serverSoc = new ServerSocket(dispatcherPort);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("Exception while creating the server socket:");
+			e.printStackTrace();
+			System.exit(0);
 		}
 		
         while (true)
@@ -190,49 +143,43 @@ public class yourRMI
             // (2) creates a socket and input/output streams.
             // (3) gets the invocation, in marshaled form.
             // (4) gets the real object reference from tbl.
-            // (5) Either:
-            //      -- using the interface name, asks the skeleton,
-            //         together with the object reference, to unmarshal
-            //         and invoke the real object.
-            //      -- or do unmarshalling directly and invokes that
-            //         object directly.
-            // (6) receives the return value, which (if not marshaled
-            //     you should marshal it here) and send it out to the 
-            //     the source of the invoker.
-            // (7) closes the socket.
-        	
-        	
-			
-				try {
+            // (5) unmarshalls directly and invokes that object directly.            
+        	try {
 				client = serverSoc.accept();
-				System.out.println(client);
 	        	ClientRmiMsg msg;
 				msg = (ClientRmiMsg) new ObjectInputStream(client.getInputStream()).readObject();
-				System.out.println("msg is");
-				//System.out.println(msg);
 				Object obj = tbl.findObj(msg.obj_key);
-				System.out.println(obj == null);
-				System.out.println(obj.getClass().getName());
-	        	new Thread(new RemoteObjThread(obj, msg, client), (tid++).toString()).start();
-	        	
-	        	// dispatcher's work is done hopefully
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					//e.printStackTrace();
-					RemoteException rex = new RemoteException("RemoteException was generated.", e.getClass());
-					try {
-						new ObjectOutputStream(client.getOutputStream()).writeObject(rex);
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+				if(obj == null) {
+				    //no object with this key found; shouldn't happen because the obj_key
+				    //was derived from the ROR that the registry sent
+				    RemoteException rex = new RemoteException("RemoteException was generated. No such object found.", RemoteException.class);
+	                try {
+	                    new ObjectOutputStream(client.getOutputStream()).writeObject(rex);
+	                } catch (IOException e) {
+	                    System.out.println("Following error occured while communicating with the client:");
+	                    e.printStackTrace();
+	                }
 				}
-			
-	   }
-    }
-
-    
+				//create new thread to service client's request
+				//tid is just for future use, for say a thread pool
+				(new Thread(new RemoteObjThread(obj, msg, client), (tid++).toString())).start(); 
+				//now the dispatcher will communicate with the client, and yourRMI can go back to 
+				//accepting requests from other clients
+	        	
+			} catch (IOException e) {
+			    //cannot communicate with client
+				System.out.println("Following I/O error occured while servicing client's request:");
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {				
+				RemoteException rex = new RemoteException("RemoteException was generated.", e.getClass());
+				try {
+					new ObjectOutputStream(client.getOutputStream()).writeObject(rex);
+				} catch (IOException e1) {
+				    //cannot communicate with client.
+	                System.out.println("Following I/O error occured while servicing client's request:");
+	                e.printStackTrace();
+				}
+			}			
+        }
+    }    
 }

@@ -69,7 +69,7 @@ public class SimpleRegistry
         return;
     }
     
-  //TODO: what to do with this on the client? 
+    //TODO: what to do with this on the client? 
     public void rebind(String serviceName, RemoteObjectRef ror) 
     throws IOException
     {        
