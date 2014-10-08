@@ -55,7 +55,9 @@ public class RemoteObjThread implements Runnable{
                 System.out.println();                
             }
 		    Method method = object.getClass().getMethod(this.message.methodName, params);
+		    System.out.println("FOUND METHOD: "+method.getName());
 			if(method.getReturnType().equals(Void.TYPE)) {
+			    System.out.println(this.object.getClass());
 			    method.invoke(this.object, this.message.args);
 			} else {
 			    result = method.invoke(this.object, this.message.args);
