@@ -1,15 +1,12 @@
 package rmiservice.rmi.server;
 
 import java.util.concurrent.ConcurrentHashMap;
-import java.io.*;
-
 import rmiservice.rmi.comm.RemoteObjectRef;
 
 public class SimpleRegistry 
 {  
 	// the actual table storing RORs
-	public ConcurrentHashMap<String, RemoteObjectRef> registry = new ConcurrentHashMap<String, 
-																				RemoteObjectRef>();
+	public ConcurrentHashMap<String, RemoteObjectRef> registry = new ConcurrentHashMap<String, RemoteObjectRef>();
     
     // simple constructor.
     public SimpleRegistry()
@@ -19,19 +16,32 @@ public class SimpleRegistry
     // returns the ROR (if found) or null (if else)
     public RemoteObjectRef lookup(String serviceName)     
     { 
-        RemoteObjectRef ror = registry.get(serviceName);    
-        // return ROR.
-        return ror;
+        if(!registry.contains(serviceName))
+            return null;
+        return registry.get(serviceName);         
     }
 
-    // bind an ROR. ROR can be null. again no check, on this or whatever. 
-    // I hate this but have no time.
+    // bind an ROR. 
     public void bind(String serviceName, RemoteObjectRef ror) 
-    throws IOException
     {
+        if(serviceName == null || ror == null)
+            return;
     	registry.put(serviceName, ror);
     }
     
+    // rebind an ROR. 
+    public void rebind(String serviceName, RemoteObjectRef ror)  
+    {
+        if(serviceName == null || ror == null)
+            return;        
+        registry.put(serviceName, ror);
+    }
     
+    // unbind an ROR. 
+    public void unbind(String serviceName) 
+    {
+        if(registry.contains(serviceName))
+            registry.remove(serviceName);
+    }    
 } 
   

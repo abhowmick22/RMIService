@@ -1,21 +1,6 @@
 package rmiservice.rmi.server;
 
 /*
- * [Neil]
- * This class basically acts as the dispatcher on the server. 
- * According to our implementation, it should continuously listen to requests by different clients.
- * It maintains an RORtable so that a new request from client must contain only the string that 
- * describes the class reference, eg. "computePI" to reference ComputePi.class. This table
- * does the mapping.
- * Now, the reference to ComputePi that the client obtained should contain:
- *  1. The dispatcherHost and dispatcherPort of the yourRMI service
- *  2. The string that describes the class that the client wants to use. So client will get
- *      a reference to the ComputePi object, and will send back the "computePI" string to
- *      yourRMI service. This is a bit redundant, but seems logical right now.
- *  
- */
-
-/*
  * The arguments it gets are follows :
  * javac yourRMI InitialClassname registryHost registryPort
  * InitialClassName is the application server class
@@ -158,12 +143,11 @@ public class yourRMI
         	toRegistry.writeObject(drm);
         	toRegistry.flush();
         
-        	//Thread.sleep(1000);
-        	//toRegistry.close();
         	registrySocket.shutdownOutput();
-        	fromRegistry.readObject();
+        	fromRegistry.readObject(); //TODO: ack?
         	registrySocket.shutdownInput();
-        	//registrySocket.close();
+        	//registrySocket.close();  TODO: why not this?
+        	
         	
         }      
      
@@ -238,10 +222,8 @@ public class yourRMI
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					//e.printStackTrace();
-					RemoteException rex = new RemoteException();
-					rex.type = e.getClass();
-		        	rex.message = "RemoteException";
-		        	try {
+					RemoteException rex = new RemoteException("RemoteException was generated.", e.getClass());
+					try {
 						new ObjectOutputStream(client.getOutputStream()).writeObject(rex);
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block

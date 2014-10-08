@@ -2,7 +2,6 @@ package rmiservice.rmi.client;
 
 import java.net.*;
 import java.io.*;
-
 import rmiservice.rmi.comm.RegistryMsg;
 
 //Needs to act as stub for LocateSimpleRegistry on the server
@@ -27,11 +26,11 @@ public class LocateSimpleRegistry
                 return new SimpleRegistry(regHost, regPort);
             }
             else {
-                System.out.println("Somebody is there but not a registry!");
+                System.out.println("Somebody is there but not a registry! System exiting.");
                 return null;
             }
         } catch (Exception e) { 
-            System.out.println("Nobody is there!"+e);
+            System.out.println("Nobody is there! Exception: "+e.getLocalizedMessage());
             return null;
         }
     }

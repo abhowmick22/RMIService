@@ -1,11 +1,8 @@
 package rmiservice.rmi.client;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -43,7 +40,8 @@ public class SimpleRegistry
             retValue = (RemoteObjectRef) inStream.readObject();                        
             inStream.close();
             outStream.close();
-            clientSocket.close();            
+            clientSocket.close(); 
+            return retValue;
         }
         catch (UnknownHostException e) {
             System.out.println("ERROR: Cannot connect to server. Unknown host: " + this.regHost);
@@ -60,36 +58,32 @@ public class SimpleRegistry
             System.out.println("Please call the method again.");
             return null;
         }
-        return retValue;
+        
+    }
+    
+    //TODO: what to do with this on the client? 
+    public void bind(String serviceName, RemoteObjectRef ror) 
+    throws IOException
+    {        
+        //client cannot execute this method
+        return;
+    }
+    
+  //TODO: what to do with this on the client? 
+    public void rebind(String serviceName, RemoteObjectRef ror) 
+    throws IOException
+    {        
+        //client cannot execute this method
+        return;
     }
     
     //TODO: what to do with this on the client? Also, for rebind, make registry check if the request is coming from server.
-    // rebind a ROR. ROR can be null. again no check, on this or whatever. 
-    // I hate this but have no time.
-    public void rebind(String serviceName, RemoteObjectRef ror) 
+    public void unbind(String serviceName, RemoteObjectRef ror) 
     throws IOException
-    {
-        // open socket. same as before.
-        Socket soc = new Socket(this.regHost, this.regPort);
-            
-        // get TCP streams and wrap them. 
-        BufferedReader in = 
-            new BufferedReader(new InputStreamReader (soc.getInputStream()));
-        PrintWriter out = 
-            new PrintWriter(soc.getOutputStream(), true);
-    
-        // it is a rebind request, with a service name and ROR.
-        out.println("rebind");
-        out.println(serviceName);
-        out.println(ror.IP_adr);
-        out.println(ror.Port); 
-        out.println(ror.Obj_Key);
-        out.println(ror.Remote_Interface_Name);
-    
-        // it also gets an ack, but this is not used.
-        String ack = in.readLine();
-    
-        // close the socket.
-        soc.close();
+    {        
+        //client cannot execute this method
+        return;
     }
+    
+    
 }

@@ -18,7 +18,8 @@ public class ZipCodeServer_stub implements ZipCodeServer
     private String serverIP;
     private int serverPort;
     
-    public ZipCodeServer_stub(String serverIP, int serverPort, int obj_key) {
+    public ZipCodeServer_stub(String serverIP, int serverPort, int obj_key) 
+    {
         this.serverIP = serverIP;
         this.serverPort = serverPort;        
         this.obj = new ClientRmiMsg();
@@ -28,11 +29,11 @@ public class ZipCodeServer_stub implements ZipCodeServer
     }
     
     @Override
-    public void initialise(ZipCodeList newList)
+    public void initialise(ZipCodeList newList) throws RemoteException
     {
         System.out.println(serverIP);
         System.out.println(serverPort);
-        this.obj.methodName = "rmiservice.rmi.comm.ZipCodeServer_Impl.initialise";
+        this.obj.methodName = "initialise";
         this.obj.args.clear();
         this.obj.args.add(newList);
         this.obj.argParams.clear();
@@ -46,15 +47,13 @@ public class ZipCodeServer_stub implements ZipCodeServer
             //acknowledgment is string "ack"; do nothing for this method
             return;
         } else {
-          //exception
-            System.out.println("Server side exception:");
-            System.out.println("Message from server: " + ((RemoteException) retValue).message);
-            System.out.println("Exception class: " + ((RemoteException) retValue).type.getName());
+            //exception
+            throw (RemoteException) retValue;
         }
     }
 
     @Override
-    public String find(String city)
+    public String find(String city) throws RemoteException
     {
         this.obj.methodName = "find";
         this.obj.args.clear();
@@ -70,16 +69,13 @@ public class ZipCodeServer_stub implements ZipCodeServer
             return (String) retValue;
         } else {
             //exception
-            System.out.println("Server side exception:");
-            System.out.println("Message from server: " + ((RemoteException) retValue).message);
-            System.out.println("Exception class: " + ((RemoteException) retValue).type.getName());
-            return null;
+            throw (RemoteException) retValue;
         }
         
     }
 
     @Override
-    public ZipCodeList findAll()
+    public ZipCodeList findAll() throws RemoteException
     {
         this.obj.methodName = "findAll";
         this.obj.args.clear();      
@@ -93,16 +89,13 @@ public class ZipCodeServer_stub implements ZipCodeServer
             return (ZipCodeList) retValue;
         } else {
             //exception
-            System.out.println("Server side exception:");
-            System.out.println("Message from server: " + ((RemoteException) retValue).message);
-            System.out.println("Exception class: " + ((RemoteException) retValue).type.getName());
-            return null;
+            throw (RemoteException) retValue;
         }
         
     }
 
     @Override
-    public void printAll()
+    public void printAll() throws RemoteException
     {       
         this.obj.methodName = "printAll";
         this.obj.args.clear();
@@ -115,15 +108,13 @@ public class ZipCodeServer_stub implements ZipCodeServer
             //acknowledgment is string "ack"; do nothing for this method  
             return;
         } else {
-          //exception
-            System.out.println("Server side exception:");
-            System.out.println("Message from server: " + ((RemoteException) retValue).message);
-            System.out.println("Exception class: " + ((RemoteException) retValue).type.getName());
+            //exception
+            throw (RemoteException) retValue;
         }
     }
     
-    private Object marshall() {        
-        
+    private Object marshall() 
+    {                
         Socket clientSocket = null;
         Object retValue = null;
         System.out.println("reached marshall");

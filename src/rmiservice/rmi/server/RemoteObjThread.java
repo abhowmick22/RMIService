@@ -9,7 +9,6 @@ import java.io.ObjectOutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-
 public class RemoteObjThread implements Runnable{
 	
 	public Object object;
@@ -101,9 +100,7 @@ public class RemoteObjThread implements Runnable{
 	}
 	
 	private void GenerateRemoteException(Exception e, ObjectOutputStream out) {
-        RemoteException rex = new RemoteException();
-        rex.type = e.getClass();
-        rex.message = "RemoteException";
+        RemoteException rex = new RemoteException("RemoteException was generated.", e.getClass());
         try {
             out.writeObject(rex);
         } catch (IOException e1) {

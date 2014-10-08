@@ -1,34 +1,23 @@
 package rmiservice.rmi.client;
 
-//a client for ZipCodeServer.
-//it uses ZipCodeServer as an interface, and test
-//all methods.
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
-//It reads data from a file containing the service name and city-zip 
-//pairs in the following way:
-//city1
-//zip1
-//...
-//...
-//end.
-
-import java.io.*;
-
+import rmiservice.rmi.comm.RemoteException;
 import rmiservice.rmi.comm.RemoteObjectRef;
 import rmiservice.rmi.comm.ZipCodeList;
 import rmiservice.rmi.comm.ZipCodeServer;
 
 public class ZipCodeClient { 
 
-    // the main takes three arguments:
-    // (0) a host. 
-     // (1) a port.
-     // (2) a service name.
-     // (3) a file name as above. 
      public static void main(String[] args) 
      {
          if(args.length!=4) {
              System.out.println("Insufficient args");
+             System.out.print("Required arguments: ");
+             System.out.println("<RegistryAddress> <RegistryPort> ZipCodeServer <FileLocation>");
              System.exit(0);
          }
          String host = args[0];
@@ -43,13 +32,15 @@ public class ZipCodeClient {
             System.exit(0);
         }
 
-         // locate the registry and get ror
+         // locate the registry and get ROR
          SimpleRegistry sr = LocateSimpleRegistry.getRegistry(host, port);
          if(sr == null) {
+             //message printed by LocateSimpleRegistry
              System.exit(0);
          }
          RemoteObjectRef ror = sr.lookup(serviceName);
          if(ror == null) {
+           //message printed by SimpleRegistry
              System.exit(0);
          }
          
@@ -93,36 +84,42 @@ public class ZipCodeClient {
              temp = temp.next;                        
          }
  
-         // test the initialise.
-         zcs.initialise(l);
-         System.out.println("\n Server initalised.");
-
-         // test the find.
-         System.out.println("\n This is the remote list given by find.");
-         temp = l;
-         while (temp !=null)
-         {
+         try {
+             // test the initialise.
+             zcs.initialise(l);
+             System.out.println("\n Server initalised.");
+    
+             // test the find.
+             System.out.println("\n This is the remote list given by find.");
+             temp = l;
+             while (temp !=null)
+             {
+                 // here is a test.
+                 String res = zcs.find(temp.city);
+                 System.out.println("city: "+temp.city+", "+
+                "code: "+res);
+                     temp=temp.next;
+             }               
+             
+             // test the findall.
+             System.out.println("\n This is the remote list given by findall.");
              // here is a test.
-             String res = zcs.find(temp.city);
-             System.out.println("city: "+temp.city+", "+
-            "code: "+res);
+             temp = zcs.findAll();
+             while (temp !=null)
+             {
+                 System.out.println
+                     ("city: "+temp.city+", "+
+                             "code: "+temp.ZipCode);
                  temp=temp.next;
-         }               
-         
-         // test the findall.
-         System.out.println("\n This is the remote list given by findall.");
-         // here is a test.
-         temp = zcs.findAll();
-         while (temp !=null)
-         {
-             System.out.println
-                 ("city: "+temp.city+", "+
-                         "code: "+temp.ZipCode);
-             temp=temp.next;
-         }                        
-         // test the printall.
-         System.out.println("\n We test the remote site printing.");
-         // here is a test.
-         zcs.printAll();
+             }                        
+             // test the printall.
+             System.out.println("\n We test the remote site printing.");
+             // here is a test.
+             zcs.printAll();
+         } catch(RemoteException e) {
+             System.out.println("Server side exception:");
+             System.out.println("Message from server: " + e.getLocalizedMessage());
+             System.out.println("Exception class: " + e.getType());
+         }
      }
 }
