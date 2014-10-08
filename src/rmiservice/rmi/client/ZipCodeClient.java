@@ -31,8 +31,8 @@ public class ZipCodeClient {
             System.out.println("File not found: "+args[3]);            
             System.exit(0);
         }
-
-         // locate the registry and get ROR
+        
+        // locate the registry and get ROR
          SimpleRegistry sr = LocateSimpleRegistry.getRegistry(host, port);
          if(sr == null) {
              //message printed by LocateSimpleRegistry
@@ -42,7 +42,7 @@ public class ZipCodeClient {
          if(ror == null) {
            //message printed by SimpleRegistry
              System.exit(0);
-         }
+         }         
          
          // get (create) the stub out of ror
          ZipCodeServer zcs = (ZipCodeServer) ror.localise();
