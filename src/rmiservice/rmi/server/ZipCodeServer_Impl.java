@@ -29,8 +29,7 @@ public class ZipCodeServer_Impl implements ZipCodeServer
     // and reconstructed.
     public void initialise(ZipCodeList newlist)
     {
-        l=newlist;
-        System.out.println(l);
+        l=newlist;        
     }
 
     // basic function: gets a city name, returns the zip code.

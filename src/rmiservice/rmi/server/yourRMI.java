@@ -99,8 +99,6 @@ public class yourRMI
             	Object obj = initialclass.newInstance();
             	objkey++;
             	tbl.addObj(objkey, obj);
-            	System.out.println("object table");
-            	System.out.println(tbl);
             	            	
             	String[] parts = objectName.split("\\.");
             	String name = parts[parts.length-1];

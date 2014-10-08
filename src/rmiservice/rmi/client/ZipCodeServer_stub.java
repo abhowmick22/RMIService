@@ -31,14 +31,11 @@ public class ZipCodeServer_stub implements ZipCodeServer
     @Override
     public void initialise(ZipCodeList newList) throws RemoteException
     {
-        System.out.println(serverIP);
-        System.out.println(serverPort);
         this.obj.methodName = "initialise";
         this.obj.args.clear();
         this.obj.args.add(newList);
         this.obj.argParams.clear();
         this.obj.argParams.add(ZipCodeList.class);
-        System.out.println("reached here");
         Object retValue = marshall();
         if(retValue == null) {
             //exception on client side, already dealt with in marshall method   
@@ -116,16 +113,13 @@ public class ZipCodeServer_stub implements ZipCodeServer
     private Object marshall() 
     {                
         Socket clientSocket = null;
-        Object retValue = null;
-        System.out.println("reached marshall");
+        Object retValue = null;        
         try {
-            clientSocket = new Socket(this.serverIP, this.serverPort);
-            System.out.println("socket created");
+            clientSocket = new Socket(this.serverIP, this.serverPort);            
             ObjectOutputStream outStream = new ObjectOutputStream(clientSocket.getOutputStream());            
             outStream.writeObject(this.obj);            
             outStream.flush();  //can't close outStream yet because it screws up the connection
-            ObjectInputStream inStream = new ObjectInputStream(clientSocket.getInputStream());
-            System.out.println("in stream created");                        
+            ObjectInputStream inStream = new ObjectInputStream(clientSocket.getInputStream());                             
             retValue = (Object) inStream.readObject();                        
             inStream.close();
             outStream.close();
