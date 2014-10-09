@@ -18,17 +18,18 @@ Communication:
 	
 	
 TODOs:
-1. check for null for all values returned by helper or stub in all client and server classes.
-2. All objects which implement “Remote” are passed by reference. Other objects are passed by value (serialized)
-3. make server_impl methods synchronized
-4. what about objects passed by reference by the client?
+---1. check for null for all values returned by helper or stub in all client and server classes.
+---2. All objects which implement “Remote” are passed by reference. Other objects are passed by value (serialized)
+---3. make server_impl methods synchronized
+---4. what about objects passed by reference by the client?
 ---5. rebind and unbind
-6. check where to close streams (on client), and where to shutdown (on server) them
+---6. check where to close streams (on client), and where to shutdown (on server) them
 7. when initializing the server, ask for the address of the machine that the server is running on. this is for 
 	embedding this address in the ROR for the client to send the request to.
 ---8. check that we are not importing any java.rmi classes/methods by mistake in any of the classes.
-9. handle all exceptions (TODO stubs)
+---9. handle all exceptions (TODO stubs)
 10. go through all the remaining TODOs
+---11. check in registryservice if the object sent by server implements Remote. if not, send back false for bind and rebind
 	
 Remote Exceptions:
 Any exception that is possible in the logic of the application programmer needs to be thrown in the interface, e.g. ZipCodeServer.

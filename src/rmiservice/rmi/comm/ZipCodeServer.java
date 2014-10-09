@@ -1,6 +1,5 @@
 package rmiservice.rmi.comm;
 
-
 public interface ZipCodeServer extends YourRemote
 {
     public void initialise(ZipCodeList newlist) throws RemoteException;

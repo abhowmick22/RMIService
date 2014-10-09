@@ -24,15 +24,15 @@ public class ZipCodeClient {
          int port = Integer.parseInt(args[1]);
          String serviceName = args[2];
          BufferedReader in = null;
-        try {
-            in = new BufferedReader(new FileReader(args[3]));
-        }
-        catch (FileNotFoundException e) {
-            System.out.println("File not found: "+args[3]);            
-            System.exit(0);
-        }
+         try {
+             in = new BufferedReader(new FileReader(args[3]));
+         }
+         catch (FileNotFoundException e) {
+             System.out.println("File not found: "+args[3]);            
+             System.exit(0);
+         }
         
-        // locate the registry and get ROR
+         // locate the registry and get ROR
          SimpleRegistry sr = LocateSimpleRegistry.getRegistry(host, port);
          if(sr == null) {
              //message printed by LocateSimpleRegistry
@@ -81,11 +81,11 @@ public class ZipCodeClient {
              System.out.println
                  ("city: "+temp.city+", "+
                          "code: "+temp.ZipCode);       
-             temp = temp.next;                        
-         }
- 
-         try {
-             // test the initialise.
+                 temp = temp.next;                        
+             }
+     
+             try {
+                 // test the initialise.
              zcs.initialise(l);
              System.out.println("\n Server initalised.");
     
@@ -121,5 +121,5 @@ public class ZipCodeClient {
              System.out.println("Message from server: " + e.getLocalizedMessage());
              System.out.println("Exception class: " + e.getType());             
          }
-     }
+    }
 }
