@@ -13,7 +13,7 @@ public class CalculatePi_Impl implements CalculatePi {
     }
     
     @Override
-    public void initialise(int digits) throws RemoteException{
+    public void initialise(int digits) throws RemoteException{        
         if(digits<0) {
             throw new RemoteException("Cannot print negative decimal digits.", RemoteException.class);            
         }

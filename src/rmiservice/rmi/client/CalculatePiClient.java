@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import rmiservice.rmi.comm.CalculatePi;
+import rmiservice.rmi.comm.RemoteException;
 import rmiservice.rmi.comm.RemoteObjectRef;
 
 public class CalculatePiClient
@@ -12,9 +13,9 @@ public class CalculatePiClient
     public static void main(String[] args) 
     {
         if(args.length!=3) {
-            System.out.println("Insufficient args");
+            System.out.println("Unmatched args");
             System.out.print("Required arguments: ");
-            System.out.println("<RegistryAddress> <RegistryPort> ZipCodeServer");
+            System.out.println("<RegistryAddress> <RegistryPort> CalculatePi");
             System.exit(0);
         }
         String host = args[0];
@@ -47,7 +48,9 @@ public class CalculatePiClient
                 if(input==0) {
                     break;
                 }
-                //TODO: do stuff with calcPi
+                calcPi.initialise(input);
+                calcPi.printServer();
+                calcPi.getPi();
             }
             catch (NumberFormatException e) {
                 System.out.println("Client side exception");
@@ -56,6 +59,10 @@ public class CalculatePiClient
             catch (IOException e) {
                 System.out.println("Client side exception");
                 e.printStackTrace();
+            }
+            catch (RemoteException e) {
+                System.out.println(e.getMessage());
+                System.out.println(e.getClass().getName());
             }
             
         }
