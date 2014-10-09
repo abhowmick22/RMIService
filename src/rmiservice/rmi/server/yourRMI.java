@@ -169,7 +169,7 @@ public class yourRMI
 				System.out.println("Following I/O error occured while servicing client's request:");
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {				
-				RemoteException rex = new RemoteException("RemoteException was generated.---", e.getClass());
+				RemoteException rex = new RemoteException("RemoteException was generated.", e.getClass());
 				try {
 					new ObjectOutputStream(client.getOutputStream()).writeObject(rex);
 				} catch (IOException e1) {

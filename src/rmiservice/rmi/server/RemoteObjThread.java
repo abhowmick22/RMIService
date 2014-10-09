@@ -83,6 +83,7 @@ public class RemoteObjThread implements Runnable{
 	}
 	
 	private void GenerateRemoteException(Exception e, ObjectOutputStream out) {
+	    System.out.println("this happened");
         RemoteException rex = new RemoteException("RemoteException was generated.", e.getClass());
         try {
             out.writeObject(rex);
