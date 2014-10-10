@@ -35,7 +35,7 @@ public class RemoteObjectRef implements Serializable
      */
     public Object localise()
     {
-        String className = "rmiservice.rmi.client." + this.Remote_Interface_Name + "_stub"; //TODO: any other way?
+        String className = "rmiservice.rmi.client." + this.Remote_Interface_Name + "_stub";
         Class<?> c;
         try {
             c = Class.forName(className);

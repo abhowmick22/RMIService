@@ -8,7 +8,6 @@ import java.net.*;
 import java.io.*;
 import rmiservice.rmi.comm.RegistryMsg;
 
-//Needs to act as stub for LocateSimpleRegistry on the server
 public class LocateSimpleRegistry 
 { 
     /**

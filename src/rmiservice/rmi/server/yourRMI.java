@@ -127,8 +127,7 @@ public class yourRMI
             
             	registrySocket.shutdownOutput();
             	fromRegistry.readObject();     //ACK from registry service about successful bind
-            	registrySocket.shutdownInput();
-            	//registrySocket.close();  //TODO: why not do this?         	        
+            	registrySocket.shutdownInput();            	         	       
             }      
      	} catch (Exception e) {
 			System.out.println("An exception occured while binding services to the registry. Printing stack trace:");

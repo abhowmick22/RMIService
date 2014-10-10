@@ -13,7 +13,6 @@ import java.net.Socket;
 import rmiservice.rmi.comm.RegistryMsg;
 import rmiservice.rmi.comm.RemoteObjectRef;
 
-// This one listens for Registry requests and handles the SimpleRegistry directly
 public class RegistryService implements Runnable{
 
 	private int port;
@@ -37,7 +36,7 @@ public class RegistryService implements Runnable{
             server = new ServerSocket(this.port);
         }
         catch (IOException e1) {
-            // TODO Auto-generated catch block
+            System.out.println("Following exception encountered while creating registry service.");
             e1.printStackTrace();
             return;
         }

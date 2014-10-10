@@ -67,27 +67,27 @@ public class SimpleRegistry
         
     }
     
-    //TODO: what to do with this on the client? 
     public void bind(String serviceName, RemoteObjectRef ror) 
     throws IOException
     {        
         //client cannot execute this method
+        System.out.println("Can't execute bind from client.");
         return;
     }
     
-    //TODO: what to do with this on the client? 
     public void rebind(String serviceName, RemoteObjectRef ror) 
     throws IOException
     {        
         //client cannot execute this method
+        System.out.println("Can't execute rebind from client.");
         return;
     }
     
-    //TODO: what to do with this on the client? Also, for rebind, make registry check if the request is coming from server.
-    public void unbind(String serviceName, RemoteObjectRef ror) 
+    public void unbind(String serviceName) 
     throws IOException
     {        
         //client cannot execute this method
+        System.out.println("Can't execute unbind from client.");
         return;
     }
     
