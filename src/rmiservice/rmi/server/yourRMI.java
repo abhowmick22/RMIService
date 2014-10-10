@@ -100,12 +100,13 @@ public class yourRMI
             	    continue;
             	} else {
             	    //now get all the methods for this interface and check if they all
-                    //throw a RemoteException
+                    //throw a RemoteException or java.lang.Exception (superclass)
                     boolean checkException = false;
                     for(Method met : yourRemoteInterface.getMethods()) {
                         checkException = false;
                         for(Class<?> excType: met.getExceptionTypes()) {
-                            if(excType.getClass().equals("rmiservice.rmi.comm.YourRemote")) {
+                            if(excType.getClass().equals("rmiservice.rmi.comm.YourRemote") ||
+                                    excType.getClass().equals("java.lang.Exception")) {
                                 checkException = true;
                                 break;
                             }
@@ -117,7 +118,7 @@ public class yourRMI
                         }
                     }
                     if(!checkException) {
-                        //RemoteException not thrown by some method, so can't bind this class
+                        //RemoteException not thrown by some method, so can't bind the class from this interface
                         continue;
                     }
             	}

@@ -29,7 +29,7 @@ public class ZipCodeServer_stub implements ZipCodeServer
     }
     
     @Override
-    public void initialise(ZipCodeList newList) throws RemoteException
+    public void initialise(ZipCodeList newList)
     {
         this.obj.methodName = "initialise";
         this.obj.args.clear();
@@ -46,7 +46,7 @@ public class ZipCodeServer_stub implements ZipCodeServer
         } else {
             //exception
             System.out.println("Remote Exception occured:");
-            throw (RemoteException) retValue;
+            //throw (RemoteException) retValue;
         }
     }
 
