@@ -34,6 +34,7 @@ TODOs:
 ---13. comment code
 14. finish report
 15. Notes: 1. we assume that user knows the service name (interface name) used to bind in the registry. 
+16. create the README with execution instructions
 	
 Remote Exceptions:
 Any exception that is possible in the logic of the application programmer needs to be thrown in the interface, e.g. ZipCodeServer.
