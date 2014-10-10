@@ -30,6 +30,7 @@ TODOs:
 ---9. handle all exceptions (TODO stubs)
 10. go through all the remaining TODOs
 ---11. check in registryservice if the object sent by server implements Remote. if not, send back false for bind and rebind
+---12. Check that all public methods of remote objects throw remote exception. Do this while initialising the remote object. 
 	
 Remote Exceptions:
 Any exception that is possible in the logic of the application programmer needs to be thrown in the interface, e.g. ZipCodeServer.
