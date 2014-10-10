@@ -54,7 +54,7 @@ public class yourRMI
         int registryPort = Integer.parseInt(args[2]);
         ArrayList<String> serviceNames = new ArrayList<String>();
         for (int i = 3; i< args.length; i++) {
-        	serviceNames.add(args[i]);        	
+        	serviceNames.add("rmiservice.rmi.server."+args[i]+"_Impl");   // gives you rmiservice.rmi.server.ZipCodeServer_Impl for example     	
         }
         
         //table that maps a service (associated with a remote object) with the local object
@@ -78,7 +78,7 @@ public class yourRMI
             	ObjectOutputStream toRegistry = new ObjectOutputStream(registrySocket.getOutputStream());
             	ObjectInputStream fromRegistry = new ObjectInputStream(registrySocket.getInputStream());
             	
-            	Class<?> initialclass = Class.forName(objectName + "_Impl");	// gives you ZipCodeServer_Impl for example
+            	Class<?> initialclass = Class.forName(objectName);	
             	boolean checkInterfaceExists = false; 
             	for(Class<?> inter : initialclass.getInterfaces()) {
                 	for(Class<?> inter2 : inter.getInterfaces()) {
