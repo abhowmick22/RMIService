@@ -32,7 +32,8 @@ TODOs:
 11. check in registryservice if the object sent by server implements Remote. if not, send back false for bind and rebind
 12. Check that all public methods of remote objects throw remote exception. Do this while initialising the remote object.
 13. comment code
-14. finish report 
+14. finish report
+15. Notes: 1. we assume that user knows the service name (interface name) used to bind in the registry. 
 	
 Remote Exceptions:
 Any exception that is possible in the logic of the application programmer needs to be thrown in the interface, e.g. ZipCodeServer.

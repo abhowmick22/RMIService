@@ -31,6 +31,7 @@ own simpleness and complexity.
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Method;
 import java.net.*;
 import java.util.ArrayList;
 
@@ -81,9 +82,11 @@ public class yourRMI
             	Class<?> initialclass = Class.forName("rmiservice.rmi.server."+objectName +"_Impl");	
             	        // gives you rmiservice.rmi.server.ZipCodeServer_Impl for example
             	boolean checkInterfaceExists = false; 
+            	Class<?> yourRemoteInterface = null;
             	for(Class<?> inter : initialclass.getInterfaces()) {
                 	for(Class<?> inter2 : inter.getInterfaces()) {
                 	    if(inter2.getName().equals("rmiservice.rmi.comm.YourRemote")){
+                	        yourRemoteInterface = inter2;
         	    			checkInterfaceExists = true;
             	        	break;
             	    	}
@@ -95,7 +98,31 @@ public class yourRMI
             	    System.out.println(objectName + " does not extend YourRemote interface and "
             	            + "hence cannot be instantiated and bound to registry.");
             	    continue;
+            	} else {
+            	    //now get all the methods for this interface and check if they all
+                    //throw a RemoteException
+                    boolean checkException = false;
+                    for(Method met : yourRemoteInterface.getMethods()) {
+                        checkException = false;
+                        for(Class<?> excType: met.getExceptionTypes()) {
+                            if(excType.getClass().equals("rmiservice.rmi.comm.YourRemote")) {
+                                checkException = true;
+                                break;
+                            }
+                        }
+                        if(!checkException) {
+                            System.out.println(met.getName() +" in " +objectName + "does not throw"
+                                    + " RemoteException. Hence "+objectName+" cannot be bound.");
+                            break;
+                        }
+                    }
+                    if(!checkException) {
+                        //RemoteException not thrown by some method, so can't bind this class
+                        continue;
+                    }
             	}
+            	
+            	
             	
             	Object obj = initialclass.newInstance();
             	objkey++;
