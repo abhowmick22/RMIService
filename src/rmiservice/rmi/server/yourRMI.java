@@ -105,8 +105,9 @@ public class yourRMI
                     for(Method met : yourRemoteInterface.getMethods()) {
                         checkException = false;
                         for(Class<?> excType: met.getExceptionTypes()) {
-                            if(excType.getClass().getName().equals("rmiservice.rmi.comm.YourRemote") ||
-                                    excType.getClass().getName().equals("java.lang.Exception")) {
+                            System.out.println(excType.getName());
+                            if(excType.getName().equals("rmiservice.rmi.comm.YourRemote") ||
+                                    excType.getName().equals("java.lang.Exception")) {
                                 checkException = true;
                                 break;
                             }
