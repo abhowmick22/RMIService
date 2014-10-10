@@ -46,7 +46,7 @@ public class CalculatePiClient
         }
         
         while(true) {
-            System.out.println("Please enter number of digits to calculate Pi to: ");
+            System.out.print("Please enter number of digits to calculate Pi to: ");
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             try {
                 int input = Integer.parseInt(br.readLine());
