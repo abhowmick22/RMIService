@@ -139,7 +139,7 @@ public class ZipCodeServer_stub implements ZipCodeServer
      * Writes the marshalled object to the server and gets the return value from the server.
      * @return Return value from server.
      */
-    private Object marshall() 
+    private Object marshall() throws RemoteException
     {                
         Socket clientSocket = null;
         Object retValue = null;        
@@ -156,19 +156,13 @@ public class ZipCodeServer_stub implements ZipCodeServer
             clientSocket.close();            
         }
         catch (UnknownHostException e) {
-            System.out.println("ERROR: Cannot connect to server. Unknown host: " + this.serverIP);
-            System.out.println("Please call the method again.");
-            return null;
+            throw new RemoteException(e);
         }
         catch (IOException e) {
-            System.out.println("ERROR: Cannot connect to server. IOException.");
-            System.out.println("Please call the method again.");
-            return null;
+            throw new RemoteException(e);
         }
         catch (ClassNotFoundException e) {
-            System.out.println("ERROR: Cannot resolve class in the stream from server. Class not found.");
-            System.out.println("Please call the method again.");
-            return null;
+            throw new RemoteException(e);
         }
         return retValue;
     }
