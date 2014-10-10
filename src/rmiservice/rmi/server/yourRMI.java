@@ -86,7 +86,7 @@ public class yourRMI
             	for(Class<?> inter : initialclass.getInterfaces()) {
                 	for(Class<?> inter2 : inter.getInterfaces()) {
                 	    if(inter2.getName().equals("rmiservice.rmi.comm.YourRemote")){
-                	        yourRemoteInterface = inter2;
+                	        yourRemoteInterface = inter;
         	    			checkInterfaceExists = true;
             	        	break;
             	    	}
@@ -102,21 +102,18 @@ public class yourRMI
             	    //now get all the methods for this interface and check if they all
                     //throw a RemoteException or java.lang.Exception (superclass)
                     boolean checkException = false;
-                    System.out.println("reached here");
-                    for(Method met : yourRemoteInterface.getMethods()) {
+                    for(Method met : yourRemoteInterface.getDeclaredMethods()) {
                         checkException = false;
-                        System.out.println(met.getName());
                         for(Class<?> excType: met.getExceptionTypes()) {
-                            System.out.println(excType.getName());
-                            if(excType.getName().equals("rmiservice.rmi.comm.YourRemote") ||
+                            if(excType.getName().equals("rmiservice.rmi.comm.RemoteException") ||
                                     excType.getName().equals("java.lang.Exception")) {
                                 checkException = true;
                                 break;
                             }
                         }
                         if(!checkException) {
-                            System.out.println(met.getName() +" in " +objectName + "does not throw"
-                                    + " RemoteException. Hence "+objectName+" cannot be bound.");
+                            System.out.println(met.getName() +" in " +objectName + " does not throw"
+                                    + " RemoteException or java.lang.Exception. Hence "+objectName+" cannot be bound to registry.");
                             break;
                         }
                     }

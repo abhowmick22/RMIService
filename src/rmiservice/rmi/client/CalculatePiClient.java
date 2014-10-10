@@ -66,6 +66,10 @@ public class CalculatePiClient
                 e.getWrappedException().printStackTrace();
                 
             }
+            catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
             
         }
     }
