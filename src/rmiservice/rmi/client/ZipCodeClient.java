@@ -117,7 +117,9 @@ public class ZipCodeClient {
              // here is a test.
              zcs.printAll();
          } catch(RemoteException e) {
+             System.out.println("Printing Stack Trace");
              e.getWrappedException().printStackTrace();            
+             System.out.flush();
          }
     }
 }

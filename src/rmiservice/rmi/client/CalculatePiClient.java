@@ -3,6 +3,7 @@ package rmiservice.rmi.client;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 
 import rmiservice.rmi.comm.CalculatePi;
 import rmiservice.rmi.comm.RemoteException;
@@ -61,7 +62,9 @@ public class CalculatePiClient
                 e.printStackTrace();
             }
             catch (RemoteException e) {
-                e.getWrappedException().printStackTrace();
+                System.out.println("Printing Exception Message:");
+                System.out.println(e.getMessage());
+                System.out.println(e.getWrappedException().getMessage());                
             }
             
         }
