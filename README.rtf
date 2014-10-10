@@ -59,7 +59,7 @@ Here, \
 -->Next, run the client code for CalculatePi or ZipCodeServer on any other machine using the following command:\
 \
 	
-\b java -cp ./build/jar/RMIService.jar rmiservice.rmi.client.<ClientName> <server-name> <registry-port> <interface-name>\
+\b java -cp ./build/jar/RMIService.jar rmiservice.rmi.client.<ClientName> <server-name> <registry-port> <interface-name> [<arguments>]\
 
 \b0 \
 For example:\
@@ -67,7 +67,7 @@ For example:\
 
 \b 	java -cp ./build/jar/RMIService.jar rmiservice.rmi.client.CalculatePiClient ghc52.ghc.andrew.cmu.edu 50000 CalculatePi\
 OR\
-	java -cp ./build/jar/RMIService.jar rmiservice.rmi.client.ZipCodeClient ghc52.ghc.andrew.cmu.edu 50000 ZipCodeServer
+	java -cp ./build/jar/RMIService.jar rmiservice.rmi.client.ZipCodeClient ghc52.ghc.andrew.cmu.edu 50000 ZipCodeServer ./src/rmiservice/rmi/client/ZipList
 \b0 \
 \
 \
