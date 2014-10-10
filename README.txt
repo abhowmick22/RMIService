@@ -30,7 +30,7 @@ TODOs:
 ---9. handle all exceptions (TODO stubs)
 10. go through all the remaining TODOs
 11. check in registryservice if the object sent by server implements Remote. if not, send back false for bind and rebind
-12. Check that all public methods of remote objects throw remote exception. Do this while initialising the remote object.
+---12. Check that all public methods of remote objects throw remote exception. Do this while initialising the remote object.
 13. comment code
 14. finish report
 15. Notes: 1. we assume that user knows the service name (interface name) used to bind in the registry. 

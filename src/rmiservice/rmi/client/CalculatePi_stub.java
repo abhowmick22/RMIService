@@ -29,7 +29,7 @@ public class CalculatePi_stub implements CalculatePi
     }
     
     @Override
-    public void initialise(int digits)
+    public void initialise(int digits) throws RemoteException
     {
         this.obj.methodName = "initialise";
         this.obj.args.clear();
@@ -46,7 +46,7 @@ public class CalculatePi_stub implements CalculatePi
         } else {
             //exception
             System.out.println("Remote Exception occured:");
-            //throw (RemoteException) retValue;
+            throw (RemoteException) retValue;
         }
     }
 

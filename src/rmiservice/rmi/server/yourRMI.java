@@ -113,17 +113,17 @@ public class yourRMI
                         }
                         if(!checkException) {
                             System.out.println(met.getName() +" in " +objectName + " does not throw"
-                                    + " RemoteException or java.lang.Exception. Hence "+objectName+" cannot be bound to registry.");
+                                    + " RemoteException or java.lang.Exception. Hence "+ objectName
+                                    + " cannot be bound to registry.");
                             break;
                         }
                     }
                     if(!checkException) {
-                        //RemoteException not thrown by some method, so can't bind the class from this interface
+                        //RemoteException or java.lang.Exception not thrown by some method, 
+                        //so can't bind the class from this interface
                         continue;
                     }
             	}
-            	
-            	
             	
             	Object obj = initialclass.newInstance();
             	objkey++;
