@@ -31,7 +31,7 @@ public class CalculatePiClient
         }
         RemoteObjectRef ror = sr.lookup(serviceName);
         if(ror == null) {
-          //message printed by SimpleRegistry
+            //message printed by SimpleRegistry
             System.exit(0);
         }         
         
@@ -62,9 +62,9 @@ public class CalculatePiClient
                 e.printStackTrace();
             }
             catch (RemoteException e) {
-                System.out.println("Printing Exception Message:");
-                System.out.println(e.getMessage());
-                System.out.println(e.getWrappedException().getMessage());                
+                System.out.println("Printing Stack Trace");
+                e.getWrappedException().printStackTrace();
+                
             }
             
         }

@@ -41,6 +41,9 @@ public class SimpleRegistry
             inStream.close();
             outStream.close();
             clientSocket.close(); 
+            if(retValue == null) {
+                System.out.println("Remote Object Reference not found.");
+            }
             return retValue;
         }
         catch (UnknownHostException e) {

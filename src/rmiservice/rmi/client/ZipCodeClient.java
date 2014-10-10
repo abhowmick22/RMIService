@@ -40,7 +40,7 @@ public class ZipCodeClient {
          }
          RemoteObjectRef ror = sr.lookup(serviceName);
          if(ror == null) {
-           //message printed by SimpleRegistry
+             //message printed by SimpleRegistry
              System.exit(0);
          }         
          
@@ -118,8 +118,7 @@ public class ZipCodeClient {
              zcs.printAll();
          } catch(RemoteException e) {
              System.out.println("Printing Stack Trace");
-             e.getWrappedException().printStackTrace();            
-             System.out.flush();
+             e.getWrappedException().printStackTrace();                         
          }
     }
 }
