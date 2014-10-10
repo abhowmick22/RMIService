@@ -98,15 +98,15 @@ public class yourRMI
             	    System.out.println(objectName + " does not extend YourRemote interface and "
             	            + "hence cannot be instantiated and bound to registry.");
             	    continue;
-            	} /*else {
+            	} else {
             	    //now get all the methods for this interface and check if they all
                     //throw a RemoteException or java.lang.Exception (superclass)
                     boolean checkException = false;
                     for(Method met : yourRemoteInterface.getMethods()) {
                         checkException = false;
                         for(Class<?> excType: met.getExceptionTypes()) {
-                            if(excType.getClass().equals("rmiservice.rmi.comm.YourRemote") ||
-                                    excType.getClass().equals("java.lang.Exception")) {
+                            if(excType.getClass().getName().equals("rmiservice.rmi.comm.YourRemote") ||
+                                    excType.getClass().getName().equals("java.lang.Exception")) {
                                 checkException = true;
                                 break;
                             }
@@ -122,7 +122,7 @@ public class yourRMI
                         continue;
                     }
             	}
-            	*/
+            	
             	
             	
             	Object obj = initialclass.newInstance();
