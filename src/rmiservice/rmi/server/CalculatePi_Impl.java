@@ -1,4 +1,8 @@
 package rmiservice.rmi.server;
+/**
+ * This is the actual implementation of the CalculatePi interface. Methods for this class are
+ * invoked remotely by the client. 
+ */
 
 import java.math.BigDecimal;
 
@@ -12,6 +16,9 @@ public class CalculatePi_Impl implements CalculatePi {
     public CalculatePi_Impl() {        
     }
     
+    /**
+     * Initialises the number of digits to which to calculate Pi.
+     */
     @Override
     public void initialise(int digits) throws RemoteException {        
         if(digits<0) {
@@ -20,18 +27,27 @@ public class CalculatePi_Impl implements CalculatePi {
         this.digits = digits;
     }
 
+    /**
+     * Prints the Pi value on the server to the number of digits initialized by the client.
+     */
     @Override
     public void printServer() throws RemoteException
     {        
         System.out.println(computePi(this.digits));        
     }
 
+    /**
+     * Returns the value of Pi (up to the number of digits requested by the client) to the client.
+     */
     @Override
     public BigDecimal getPi() throws RemoteException
     {
         return computePi(this.digits);
     }
     
+    /**
+     * The Pi computation logic. Obtained from http://docs.oracle.com/javase/tutorial/rmi/client.html
+     */
     private BigDecimal computePi(int digits) {
         int scale = digits + 5;
         BigDecimal arctan1_5 = arctan(5, scale);
@@ -42,6 +58,9 @@ public class CalculatePi_Impl implements CalculatePi {
                            BigDecimal.ROUND_HALF_UP);
     }
     
+    /**
+     * Part of Pi computation logic. Obtained from http://docs.oracle.com/javase/tutorial/rmi/client.html.
+     */
     private static BigDecimal arctan(int inverseX, 
                                     int scale) 
     {

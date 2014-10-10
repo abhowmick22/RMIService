@@ -1,4 +1,9 @@
 package rmiservice.rmi.client;
+/**
+ * The actual client which calls methods on the stub, which in turn marshalls them for execution
+ * on the server. It receives the return value from the stub, and a remote exception if one is thrown
+ * in the server.
+ */
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

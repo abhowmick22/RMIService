@@ -1,4 +1,12 @@
 package rmiservice.rmi.comm;
+/**
+ * The RemoteObjectRef (ROR) forms the backbone of our RMI. ROR is created for every service hosted
+ * by the server. An ROR is bound to the registry by the server, and the client can get it from there.
+ * Using the ROR, the client can instantiate a stub which in turn communicates with the server to 
+ * perform remote method invocations. 
+ * The ROR contains the server's IP and port, as well as the interface name that it represents and
+ * a unique object key corresponding to the actual object i=on the server.
+ */
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;

@@ -1,38 +1,37 @@
 package rmiservice.rmi.server;
+/**
+ * This is the actual implementation of the ZipCodeServer interface. Methods for this class are
+ * invoked remotely by the client. 
+ */
 
 import rmiservice.rmi.comm.ZipCodeList;
 import rmiservice.rmi.comm.ZipCodeServer;
-
-//in implementation, you do not have to extend this as in Java RMI. 
-//in your design, however, you can do so.
-//it is assumed that this is not directly called but as in:
-//
-//java yourRMI ZipCodeServerImpl registryhost registryport servicename
-//  OR
-//java yourRMI registryHost registryPort servicename1(eg. ZipCodeServer)
-//
-//therefore it does not contain main: new object creation, binding etc. is 
-//done via yourRMI
 
 public class ZipCodeServer_Impl implements ZipCodeServer
 {
     private ZipCodeList l;
     
-    // this is a constructor.
+    /**
+     * Constructor
+     */
     public ZipCodeServer_Impl()
     {
         l=null;
     }
 
-    // when this is called, unmarshalled data
-    // should be sent to this remote object,
-    // and reconstructed.
+    /**
+     * Initializes the list
+     */
+    @Override
     public void initialise(ZipCodeList newlist)
     {
         l=newlist;        
     }
 
-    // basic function: gets a city name, returns the zip code.
+    /**
+     * Finds a zip code for a city.
+     */
+    @Override
     public String find(String request)
     {
         // search the list.
@@ -47,14 +46,19 @@ public class ZipCodeServer_Impl implements ZipCodeServer
             return temp.ZipCode;
     }
 
-    // this very short method should send the marshalled 
-    // whole list to the local site.
+    /**
+     * Sends entire list of cities and zip codes back to client.
+     */
+    @Override
     public ZipCodeList findAll()
     {
         return l;
     }
 
-    // this method does printing in the remote site, not locally.
+    /**
+     * This method does printing in the remote site, not locally. 
+     */
+    @Override
     public void printAll() 
     {
         ZipCodeList temp=l;

@@ -1,4 +1,9 @@
 package rmiservice.rmi.server;
+/**
+ * RemoteObjThread is the servant thread that executes client requests of invoking a method on a
+ * remote object. A new RemoteObjThread is created for every request from the client, and hence for
+ * every remote invocation. 
+ */
 
 import java.net.Socket;
 
@@ -16,6 +21,12 @@ public class RemoteObjThread implements Runnable{
 	public ClientRmiMsg message;
 	public Socket client;
 	
+	/**
+	 * Constructor.
+	 * @param obj Actual object.
+	 * @param msg Client's message.
+	 * @param client Client connection.
+	 */
 	public RemoteObjThread(Object obj, ClientRmiMsg msg, Socket client) {
 		this.object = obj;
 		this.message = msg;
@@ -82,6 +93,11 @@ public class RemoteObjThread implements Runnable{
         }		
 	}
 	
+	/**
+	 * Generates a remote exception (which encapsulates the actual exception) to be sent back to the client.
+	 * @param e Actual exception on server.
+	 * @param out Client output stream.
+	 */
 	private void GenerateRemoteException(Exception e, ObjectOutputStream out) {
         RemoteException rex = new RemoteException(e);
         try {

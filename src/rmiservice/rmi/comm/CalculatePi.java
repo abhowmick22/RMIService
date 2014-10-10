@@ -1,4 +1,7 @@
 package rmiservice.rmi.comm;
+/**
+ * The CalculatePi interface created by the client.
+ */
 
 import java.math.BigDecimal;
 

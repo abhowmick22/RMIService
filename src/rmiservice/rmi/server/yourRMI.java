@@ -1,32 +1,15 @@
 package rmiservice.rmi.server;
-
-/*
- * The arguments it gets are follows :
- * javac yourRMI InitialClassname registryHost registryPort
- * InitialClassName is the application server class
- * One object/one serviceName per application server class
- * OR 
- * java yourRMI registryHost registryPort servicename1(eg. ZipCodeServer)
- * Assume all InitialClassNames are known at start, and it binds an object of each type
- * However, in the future - let it take a list of available InitialClassNames as an argument
+/**
+ * The yourRMI class acts as the application server and dispatcher on the server side. It begins by
+ * creating a thread which runs the registry service, that communicates with the registry.
+ * It instantiates all the remote implementation classes of the user defined interfaces, and binds
+ * the corresponding reference objects to the registry. It then acts as a server, listening to 
+ * client requests for invoking a method on a server object. 
+ * It unmarshalls client requests and creates a servant thread to invoke methods requested by the user.
+ * It maintains a table that maps a unique object key to an actual object, the reference of which
+ * is bound to the registry. The user can get this key from the reference and send it to this server
+ * for identifying an object. 
  */
-
-/* This does not offer the code of the whole communication module 
-(CM) for RMI: but it gives some hints about how you can make 
-it. I call it simply "yourRMI". 
-
-For example, it  shows how you can get the dispatcherHost name etc.,
-(well you can hardwire it if you like, I should say),
-or how you can make a class out of classname as a string.
-
-This just shows one design option. Other options are
-possible. We assume there is a unique skeleton for each
-remote object class (not object) which is called by CM 
-by static methods for unmarshalling etc. We can do without
-it, in which case CM does marshalling/unmarhshalling.
-Which is simpler, I cannot say, since both have their
-own simpleness and complexity.
-*/
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -66,12 +49,13 @@ public class yourRMI
             RegistryService regService = new RegistryService(registryPort);
             Thread regServiceThread = new Thread(regService);
             regServiceThread.start();        
-            // TODO : better way to check if it is up ?
             //wait till the registry is up and running
+            System.out.println("Waiting for registry to be up...");
             while(!regServiceThread.isAlive());
-        
-            // Instantiate objects of every serviceName, create the map RORtbl and bind these services
+            System.out.println("Registry is up!");
+            
             int objkey = 0;
+            // Instantiate objects of every serviceName, create the map RORtbl and bind these services                        
             for (String objectName : serviceNames){
     
             	Socket registrySocket = new Socket(registryHost, registryPort);
@@ -126,8 +110,8 @@ public class yourRMI
             	}
             	
             	Object obj = initialclass.newInstance();
-            	objkey++;
-            	tbl.addObj(objkey, obj);
+            	objkey++;  //unique object key
+            	tbl.addObj(objkey, obj);   //add the object and object key to the rortable
             	            	
             	String[] parts = objectName.split("\\.");
             	String name = parts[parts.length-1];
@@ -142,18 +126,17 @@ public class yourRMI
             	toRegistry.flush();
             
             	registrySocket.shutdownOutput();
-            	fromRegistry.readObject();     //ACK
+            	fromRegistry.readObject();     //ACK from registry service about successful bind
             	registrySocket.shutdownInput();
             	//registrySocket.close();  //TODO: why not do this?         	        
             }      
      	} catch (Exception e) {
-			System.out.println("An exception occured while binding services to the registry:");
+			System.out.println("An exception occured while binding services to the registry. Printing stack trace:");
 			e.printStackTrace();
 		} 
  
-		Integer tid = 0;
+		Integer tid = 0;  //unique thread ID for future use (for say a thread pool)
 		Socket client = null;
-		
 		// socket to listen for RMI requests
 		ServerSocket serverSoc = null;
 		try {
@@ -161,6 +144,7 @@ public class yourRMI
 		} catch (IOException e) {
 			System.out.println("Exception while creating the server socket:");
 			e.printStackTrace();
+			System.out.println("Exiting system.");
 			System.exit(0);
 		}
 		
@@ -168,9 +152,9 @@ public class yourRMI
         {
             // (1) receives an invocation request.
             // (2) creates a socket and input/output streams.
-            // (3) gets the invocation, in marshaled form.
+            // (3) gets the invocation in marshaled form, and unmarshals it.
             // (4) gets the real object reference from tbl.
-            // (5) unmarshalls directly and invokes that object directly.            
+            // (5) creates servant thread to invoke the method on the real object.          
         	try {
 				client = serverSoc.accept();
 	        	ClientRmiMsg msg;
@@ -179,20 +163,23 @@ public class yourRMI
 				if(obj == null) {
 				    //no object with this key found; shouldn't happen because the obj_key
 				    //was derived from the ROR that the registry sent
+				    //but the user might have sent a faulty key; convey this to the user
 				    RemoteException rex = new RemoteException("RemoteException was generated. No such object found.", RemoteException.class);
 	                try {
 	                    new ObjectOutputStream(client.getOutputStream()).writeObject(rex);
 	                } catch (IOException e) {
 	                    System.out.println("Following error occured while communicating with the client:");
 	                    e.printStackTrace();
+	                    continue;
 	                }
 				}
-				//create new thread to service client's request
-				//tid is just for future use, for say a thread pool
-				(new Thread(new RemoteObjThread(obj, msg, client), (tid++).toString())).start(); 
+				
+				//create new thread (servant) to service client's request
+				//again, tid is just for future use, for say a thread pool				
+				(new Thread(new RemoteObjThread(obj, msg, client), (tid++).toString())).start();				
 				//now the dispatcher will communicate with the client, and yourRMI can go back to 
-				//accepting requests from other clients
-	        	
+				//accepting requests from other clients	        	
+				
 			} catch (IOException e) {
 			    //cannot communicate with client
 				System.out.println("Following I/O error occured while servicing client's request:");

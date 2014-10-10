@@ -1,4 +1,9 @@
 package rmiservice.rmi.server;
+/**
+ * RegistryService accepts registry requests. It accepts requests from a client to lookup a remote
+ * object reference (ROR) in the registry, and from the server to bind, unbind or rebind an ROR to the registry.
+ * It runs in a separate thread and communications are done over a socket connection. 
+ */
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -14,7 +19,12 @@ public class RegistryService implements Runnable{
 	private int port;
 	public SimpleRegistry rs;
 	
-	public RegistryService(int registryPort) throws IOException {
+	/**
+	 * Constructor.
+	 * @param registryPort Registry port.
+	 * @throws IOException
+	 */
+	public RegistryService(int registryPort) {
 		this.port = registryPort;				
 		this.rs = new SimpleRegistry();
 	}

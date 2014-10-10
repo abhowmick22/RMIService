@@ -1,4 +1,7 @@
 package rmiservice.rmi.comm;
+/**
+ * ADT to hold city and zip code data. 
+ */
 
 import java.io.Serializable;
 

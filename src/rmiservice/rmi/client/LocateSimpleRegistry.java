@@ -1,4 +1,8 @@
 package rmiservice.rmi.client;
+/**
+ * Helps the client locate the simple registry by checking if it is up and returning an instance of
+ * it back to the client.
+ */
 
 import java.net.*;
 import java.io.*;
@@ -7,7 +11,12 @@ import rmiservice.rmi.comm.RegistryMsg;
 //Needs to act as stub for LocateSimpleRegistry on the server
 public class LocateSimpleRegistry 
 { 
-    
+    /**
+     * Locates the registry for the client.
+     * @param regHost Registry IP.
+     * @param regPort Registry port.
+     * @return Instance of SimpleRegistry.
+     */
     public static SimpleRegistry getRegistry(String regHost, int regPort)
     {
         try{
@@ -23,6 +32,7 @@ public class LocateSimpleRegistry
             outStream.close();
             clientSocket.close();
             if (retValue.equals("I am a simple registry.")) {
+                //the registry is up and running, so return a new communication instance to the client.
                 return new SimpleRegistry(regHost, regPort);
             }
             else {

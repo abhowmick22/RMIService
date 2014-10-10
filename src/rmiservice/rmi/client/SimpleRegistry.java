@@ -1,4 +1,7 @@
 package rmiservice.rmi.client;
+/**
+ * SimpleRegistry on the client acts as a stub for the actual SimpleRegistry (on the server).
+ */
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

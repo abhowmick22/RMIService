@@ -1,4 +1,7 @@
 package rmiservice.rmi.comm;
+/**
+ * The ZipCodeServer interface created by the client.
+ */
 
 public interface ZipCodeServer extends YourRemote
 {

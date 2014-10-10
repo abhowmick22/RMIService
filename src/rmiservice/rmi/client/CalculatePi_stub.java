@@ -1,4 +1,11 @@
 package rmiservice.rmi.client;
+/**
+ * The stub for CalculatePi on the client side implementing the CalculatePi interface that 
+ * communicates with the server on behalf of the client. The client makes local calls to methods 
+ * in this stub, which in turn marshalls the client's request to the server. Additionally, it waits 
+ * for server reply on the successful execution of a remote method invocation, and the return value 
+ * of the method. It also throws a RemoteException obtained from the server back to the client.
+ */
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -18,6 +25,9 @@ public class CalculatePi_stub implements CalculatePi
     private String serverIP;
     private int serverPort;
     
+    /**
+     * Constructor.
+     */
     public CalculatePi_stub(String serverIP, int serverPort, int obj_key) 
     {
         this.serverIP = serverIP;
@@ -28,6 +38,9 @@ public class CalculatePi_stub implements CalculatePi
         this.obj.argParams = new ArrayList<Class<?>>();
     }
     
+    /**
+     * Marshalls the initialise method.
+     */
     @Override
     public void initialise(int digits) throws RemoteException
     {
@@ -50,6 +63,9 @@ public class CalculatePi_stub implements CalculatePi
         }
     }
 
+    /**
+     * Marshalls the printServer method.
+     */
     @Override
     public void printServer() throws RemoteException
     {       
@@ -70,6 +86,9 @@ public class CalculatePi_stub implements CalculatePi
         }
     }
     
+    /**
+     * Marshalls the getPi method.
+     */
     @Override
     public BigDecimal getPi() throws RemoteException
     {
@@ -90,6 +109,10 @@ public class CalculatePi_stub implements CalculatePi
         }
     }
     
+    /**
+     * Writes the marshalled object to the server and gets the return value from the server.
+     * @return Return value from server.
+     */
     private Object marshall() 
     {                
         Socket clientSocket = null;
@@ -123,8 +146,4 @@ public class CalculatePi_stub implements CalculatePi
         }
         return retValue;
     }
-
-    
-    
-
 }
