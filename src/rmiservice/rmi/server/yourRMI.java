@@ -102,8 +102,10 @@ public class yourRMI
             	    //now get all the methods for this interface and check if they all
                     //throw a RemoteException or java.lang.Exception (superclass)
                     boolean checkException = false;
+                    System.out.println("reached here");
                     for(Method met : yourRemoteInterface.getMethods()) {
                         checkException = false;
+                        System.out.println(met.getName());
                         for(Class<?> excType: met.getExceptionTypes()) {
                             System.out.println(excType.getName());
                             if(excType.getName().equals("rmiservice.rmi.comm.YourRemote") ||
