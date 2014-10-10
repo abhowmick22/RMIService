@@ -67,8 +67,7 @@ public class CalculatePiClient
             }
             catch (RemoteException e) {
                 System.out.println("Printing Stack Trace");
-                e.getWrappedException().printStackTrace();
-                break;
+                e.getWrappedException().printStackTrace();                
             }            
         }
     }
