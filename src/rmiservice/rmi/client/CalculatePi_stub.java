@@ -35,7 +35,7 @@ public class CalculatePi_stub implements CalculatePi
         this.obj.args.clear();
         this.obj.args.add(digits);
         this.obj.argParams.clear();
-        this.obj.argParams.add(Integer.class);
+        this.obj.argParams.add(int.class);
         Object retValue = marshall();
         if(retValue == null) {
             //exception on client side, already dealt with in marshall method   
@@ -45,6 +45,7 @@ public class CalculatePi_stub implements CalculatePi
             return;
         } else {
             //exception
+            System.out.println("Remote Exception occured:");
             throw (RemoteException) retValue;
         }
     }
@@ -64,6 +65,7 @@ public class CalculatePi_stub implements CalculatePi
             return;
         } else {
             //exception
+            System.out.println("Remote Exception occured:");
             throw (RemoteException) retValue;
         }
     }
@@ -83,6 +85,7 @@ public class CalculatePi_stub implements CalculatePi
             return (BigDecimal) retValue;
         } else {
             //exception
+            System.out.println("Remote Exception occured:");
             throw (RemoteException) retValue;
         }
     }

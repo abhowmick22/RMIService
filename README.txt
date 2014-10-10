@@ -53,3 +53,6 @@ way to distinguish between the two, but we have not accounted for that.
 We can do something similar for the LocateSimpleRegistry.getRegistry() method and the lookup method in SimpleRegistry, but we
 are not doing that in our implementation. The stub for LocateSimpleRegistry and the SimpleRegistry resp. handle the exceptions.
 The client only has to check for null return values from these local methods. 
+
+RemoteException thrown by an _Impl method will be caught as an InvocationTargetException in RemoteObjThread.
+So we wrap it again as a RemoteException -->improve?

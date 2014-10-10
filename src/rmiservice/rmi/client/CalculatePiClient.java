@@ -50,7 +50,7 @@ public class CalculatePiClient
                 }
                 calcPi.initialise(input);
                 calcPi.printServer();
-                calcPi.getPi();
+                System.out.println(calcPi.getPi());
             }
             catch (NumberFormatException e) {
                 System.out.println("Client side exception");
@@ -61,8 +61,7 @@ public class CalculatePiClient
                 e.printStackTrace();
             }
             catch (RemoteException e) {
-                System.out.println(e.getMessage());
-                System.out.println(e.getClass().getName());
+                e.getWrappedException().printStackTrace();
             }
             
         }

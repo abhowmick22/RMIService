@@ -45,6 +45,7 @@ public class ZipCodeServer_stub implements ZipCodeServer
             return;
         } else {
             //exception
+            System.out.println("Remote Exception occured:");
             throw (RemoteException) retValue;
         }
     }
@@ -66,6 +67,7 @@ public class ZipCodeServer_stub implements ZipCodeServer
             return (String) retValue;
         } else {
             //exception
+            System.out.println("Remote Exception occured:");
             throw (RemoteException) retValue;
         }
         
@@ -86,6 +88,7 @@ public class ZipCodeServer_stub implements ZipCodeServer
             return (ZipCodeList) retValue;
         } else {
             //exception
+            System.out.println("Remote Exception occured:");
             throw (RemoteException) retValue;
         }
         
@@ -106,6 +109,7 @@ public class ZipCodeServer_stub implements ZipCodeServer
             return;
         } else {
             //exception
+            System.out.println("Remote Exception occured:");
             throw (RemoteException) retValue;
         }
     }
